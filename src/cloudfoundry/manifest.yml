@@ -1,0 +1,14 @@
+---
+applications:
+- name: platform-snapshot
+  memory: 512M
+  instances: 1
+  host: platform-snapshot
+  path: target/platform-snapshot-${version}.jar
+  services: 
+  - sso
+  - platform-snapshot-db
+  - platformcontext
+  env:
+    SPRING_PROFILES_ACTIVE: "cloud"
+    VERSION: ${version}

@@ -1,0 +1,87 @@
+spring:
+  profiles: cloud
+
+server.port: 8080
+
+security:
+  ignored: /rest/open,/*.js,/sdoc.jsp,/api-docs,/api-docs/default/*,/images/*,/lib/*,/css/*
+
+spring.oauth2:
+  client:
+    accessTokenUri: ${vcap.services.sso.credentials.tokenUri}
+    userAuthorizationUri: ${vcap.services.sso.credentials.authorizationUri}
+    clientId: ${vcap.services.sso.credentials.clientId}
+    clientSecret: ${vcap.services.sso.credentials.clientSecret}
+
+  resource:
+    id: cloud_controller
+    jwt:
+      keyUri: ${vcap.services.sso.credentials.tokenKey}
+    userInfoUri: ${vcap.services.sso.credentials.userInfoUri}
+    api: ${vcap.services.sso.credentials.apiEndpoint}
+  check_token: ${vcap.services.sso.credentials.checkTokenUri}
+
+services:
+  platform-context: ${vcap.services.platformcontext.credentials.host}
+
+logging:
+  level:
+    org.springframework.security: DEBUG
+    org.trustedanalytics: DEBUG
+
+
+endpoints.enabled: false
+endpoints.health.enabled: true
+spring.datasource.platform: cloud
+spring.jpa.database: POSTGRESQL
+spring.datasource: platform=postgres
+spring.jpa.show-sql: true
+spring.jpa.hibernate.ddl-auto: ""
+spring.database.driverClassName: org.postgresql.Driver
+spring.datasource.url: jdbc:postgresql://${vcap.services.platform-snapshot-db.credentials.hostname}:${vcap.services.platform-snapshot-db.credentials.port}/${vcap.services.platform-snapshot-db.credentials.dbname}
+spring.datasource.username: ${vcap.services.platform-snapshot-db.username}
+spring.datasource.password: ${vcap.services.platform-snapshot-db.credentials.password}
+
+---
+
+spring:
+  profiles: local
+
+server.port: 8080
+
+security:
+  ignored: /rest/**,/rest/test,/console/**,/console,/test,/**,/*.js,/sdoc.jsp,/api-docs,/api-docs/default/*,/images/*,/lib/*,/css/*,/v2/api-docs
+
+logging:
+  level:
+    org.springframework.security: DEBUG
+    org.trustedanalytics: DEBUG
+
+spring.oauth2:
+  client:
+    accessTokenUri: ${vcap.services.sso.credentials.tokenUri}
+    userAuthorizationUri: ${vcap.services.sso.credentials.authorizationUri}
+    clientId: ${vcap.services.sso.credentials.clientId}
+    clientSecret: ${vcap.services.sso.credentials.clientSecret}
+
+  resource:
+    id: cloud_controller
+    jwt:
+      keyUri: ${vcap.services.sso.credentials.tokenKey}
+    userInfoUri: ${vcap.services.sso.credentials.userInfoUri}
+  check_token: ${vcap.services.sso.credentials.checkTokenUri}
+
+
+
+endpoints.enabled: false
+endpoints.health.enabled: true
+
+spring.datasource.platform: cloud
+spring.jpa.database: POSTGRESQL
+spring.datasource: platform=postgres
+spring.jpa.show-sql: true
+spring.jpa.hibernate.ddl-auto: ""
+spring.database.driverClassName: org.postgresql.Driver
+spring.datasource.url: "jdbc:postgresql://172.17.0.3:5432/postgres"
+spring.datasource.username: postgres
+spring.datasource.password: postgres
