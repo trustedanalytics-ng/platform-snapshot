@@ -38,6 +38,7 @@ import java.util.Collection;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import io.swagger.annotations.ApiOperation;
 
 @RestController
 public class PlatformSnapshotController {
@@ -51,6 +52,10 @@ public class PlatformSnapshotController {
         this.platformSnapshotScheduler = platformSnapshotScheduler;
     }
 
+    @ApiOperation(
+        value = "Get platform snapshots",
+        notes = "Privilege level: Consumer of this endpoint must be an admin."
+    )
     @RequestMapping(value = "/rest/v1/snapshots", method = GET, produces = APPLICATION_JSON_VALUE)
     public Collection<PlatformSnapshot> getPlatformSnapshot(
         @RequestParam("from") Optional<LocalDateTime> fromDate,
@@ -67,16 +72,28 @@ public class PlatformSnapshotController {
             .collect(Collectors.toList());
     }
 
+    @ApiOperation(
+        value = "Get platform snapshot by id",
+        notes = "Privilege level: Consumer of this endpoint must be an admin."
+    )
     @RequestMapping(value = "/rest/v1/snapshots/{id}", method = GET, produces = APPLICATION_JSON_VALUE)
     public PlatformSnapshot getPlatformSnapshot(@PathVariable("id") Long id) {
         return platformSnapshotRepository.findOne(id);
     }
 
+    @ApiOperation(
+        value = "Trigger platform snapshot generation",
+        notes = "Privilege level: Consumer of this endpoint must be an admin."
+    )
     @RequestMapping(value = "/rest/v1/snapshots/trigger", method = GET, produces = APPLICATION_JSON_VALUE)
     public void triggerPlatformSnapshot() {
         platformSnapshotScheduler.trigger();
     }
 
+    @ApiOperation(
+        value = "Get platform snapshot configuration",
+        notes = "Privilege level: Consumer of this endpoint must be an admin."
+    )
     @RequestMapping(value = "/rest/v1/configuration", method = GET, produces = APPLICATION_JSON_VALUE)
     public PlatformSnapshotConfiguration getPlatformConfiguration() {
         return new PlatformSnapshotConfiguration(Arrays.asList(Scope.values())
