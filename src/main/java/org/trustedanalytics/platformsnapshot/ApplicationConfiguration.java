@@ -17,7 +17,7 @@ package org.trustedanalytics.platformsnapshot;
 
 import org.trustedanalytics.platformsnapshot.client.CfOperations;
 import org.trustedanalytics.platformsnapshot.client.CfRxClient;
-import org.trustedanalytics.platformsnapshot.client.LocalDateTimeConverter;
+import org.trustedanalytics.platformsnapshot.client.LocalDateTimeDeserializer;
 import org.trustedanalytics.platformsnapshot.client.PlatformContextOperations;
 import org.trustedanalytics.platformsnapshot.security.OAuth2TokenSupplier;
 
@@ -78,8 +78,8 @@ public class ApplicationConfiguration {
     }
 
     @Bean
-    public LocalDateTimeConverter localDateTimeConverter() {
-        return new LocalDateTimeConverter();
+    public LocalDateTimeDeserializer localDateTimeDeserializer() {
+        return new LocalDateTimeDeserializer();
     }
 
     @Bean

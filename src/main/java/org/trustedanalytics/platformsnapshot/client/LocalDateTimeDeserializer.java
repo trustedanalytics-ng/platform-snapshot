@@ -19,6 +19,7 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.deser.std.FromStringDeserializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.convert.converter.Converter;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -27,7 +28,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 
-public class LocalDateTimeDeserializer extends FromStringDeserializer<LocalDateTime> {
+public class LocalDateTimeDeserializer extends FromStringDeserializer<LocalDateTime> implements Converter<String, LocalDateTime> {
     private static final Logger LOGGER = LoggerFactory.getLogger(LocalDateTimeDeserializer.class);
 
     public LocalDateTimeDeserializer() {
@@ -36,6 +37,15 @@ public class LocalDateTimeDeserializer extends FromStringDeserializer<LocalDateT
 
     @Override
     protected LocalDateTime _deserialize(String value, DeserializationContext ctxt) throws IOException {
+        return doConvert(value);
+    }
+
+    @Override
+    public LocalDateTime convert(String value) {
+        return doConvert(value);
+    }
+
+    private LocalDateTime doConvert(String value) {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss'Z'");
         try {
             Date date = formatter.parse(value);
