@@ -47,7 +47,7 @@ public class PlatformSnapshotController {
 
     @Autowired
     public PlatformSnapshotController(PlatformSnapshotRepository platformSnapshotRepository,
-        PlatformSnapshotScheduler platformSnapshotScheduler) {
+                                      PlatformSnapshotScheduler platformSnapshotScheduler) {
         this.platformSnapshotRepository = platformSnapshotRepository;
         this.platformSnapshotScheduler = platformSnapshotScheduler;
     }

@@ -18,6 +18,9 @@ package org.trustedanalytics.platformsnapshot.service;
 import org.trustedanalytics.platformsnapshot.client.CfOperations;
 import org.trustedanalytics.platformsnapshot.client.PlatformContext;
 import org.trustedanalytics.platformsnapshot.client.PlatformContextOperations;
+import org.trustedanalytics.platformsnapshot.client.cdh.CdhOperations;
+import org.trustedanalytics.platformsnapshot.model.CdhServiceArtifact;
+import org.trustedanalytics.platformsnapshot.client.cdh.entity.CdhCluster;
 import org.trustedanalytics.platformsnapshot.model.CfApplicationArtifact;
 import org.trustedanalytics.platformsnapshot.model.PlatformSnapshot;
 import org.trustedanalytics.platformsnapshot.model.Scope;
@@ -29,12 +32,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.Date;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
@@ -49,14 +54,18 @@ public class PlatformSnapshotScheduler {
     private final PlatformContextOperations ctx;
     private final PlatformSnapshotRepository repository;
     private final ScheduledExecutorService executor;
+    private final CdhOperations cdhOperations;
 
     @Autowired
-    public PlatformSnapshotScheduler(CfOperations cf, PlatformContextOperations ctx,
-        PlatformSnapshotRepository repository) {
+    public PlatformSnapshotScheduler(CfOperations cf,
+                                     PlatformContextOperations ctx,
+                                     PlatformSnapshotRepository repository,
+                                     CdhOperations cdhOperations) {
         this.cf = Objects.requireNonNull(cf, CfOperations.class.getSimpleName());
         this.ctx = Objects.requireNonNull(ctx, PlatformContextOperations.class.getSimpleName());
         this.repository = Objects.requireNonNull(repository, PlatformSnapshotRepository.class.getSimpleName());
         this.executor = new ScheduledThreadPoolExecutor(1);
+        this.cdhOperations = cdhOperations;
     }
 
     @PostConstruct
@@ -77,11 +86,12 @@ public class PlatformSnapshotScheduler {
             final PlatformContext context = ctx.getPlatformContext();
             LOG.info("Platform context: {}", context);
             final UUID coreOrg = cf.getOrganization("name:" + context.getCoreOrganization()).toBlocking().single().getMetadata().getGuid();
+            final CdhCluster cdhCluster = cdhOperations.getCdhClusters().getItems().stream().findFirst().get();
 
             cf.getSpaces()
               .flatMap(s -> applications(s.getEntity().getOrganizationGuid(), s.getMetadata().getGuid(), coreOrg))
               .toList()
-              .map(apps -> new PlatformSnapshot(new Date(), context.getPlatformVersion(), apps))
+              .map(apps -> new PlatformSnapshot(new Date(), context.getPlatformVersion(), apps, cdhCluster.getFullVersion(), cdhServices(cdhCluster.getName())))
               .doOnNext(snapshot -> LOG.info("Persisting platform snapshot: {}", LocalDateTime.now()))
               .map(repository::save)
               .subscribe(snapshot -> LOG.info("Platform snapshot completed: {}", LocalDateTime.now()));
@@ -92,5 +102,12 @@ public class PlatformSnapshotScheduler {
         return Observable.defer(() -> cf.getApplications(space))
                 .map(app -> new CfApplicationArtifact(app, organization, Scope.resolve(coreOrg, organization)))
                 .subscribeOn(Schedulers.io());
+    }
+
+    private Collection<CdhServiceArtifact> cdhServices(String clusterName) {
+        return cdhOperations.getCdhServices(clusterName).getItems()
+            .stream()
+            .map(CdhServiceArtifact::new)
+            .collect(Collectors.toList());
     }
 }

@@ -49,15 +49,26 @@ public class PlatformSnapshot {
 
     private Date createdAt;
 
+    private String cdhVersion;
+
     @OneToMany(mappedBy = "snapshot", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Collection<CfApplicationArtifact> applications;
 
-    public PlatformSnapshot(Date createdAt, String platformVersion,
-        Collection<CfApplicationArtifact> applications) {
+    @OneToMany(mappedBy = "snapshot", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Collection<CdhServiceArtifact> cdhServices;
+
+    public PlatformSnapshot(Date createdAt,
+                            String platformVersion,
+                            Collection<CfApplicationArtifact> applications,
+                            String cdhVersion,
+                            Collection<CdhServiceArtifact> cdhServices) {
         this.createdAt = createdAt;
         this.platformVersion = platformVersion;
         this.applications = applications;
+        this.cdhServices = cdhServices;
+        this.cdhVersion = cdhVersion;
 
+        cdhServices.forEach(cdhService -> cdhService.setSnapshot(this));
         applications.forEach(application -> application.setSnapshot(this));
     }
 
@@ -69,7 +80,9 @@ public class PlatformSnapshot {
             .id(id)
             .createdAt(createdAt)
             .platformVersion(platformVersion)
+            .cdhVersion(cdhVersion)
             .applications(applications.stream().filter(predicate).collect(Collectors.toList()))
+            .cdhServices(cdhServices)
             .build();
     }
 }
