@@ -20,6 +20,7 @@ import feign.Param;
 import feign.RequestLine;
 
 import org.trustedanalytics.platformsnapshot.client.entity.CfApplication;
+import org.trustedanalytics.platformsnapshot.client.entity.CfInfo;
 import org.trustedanalytics.platformsnapshot.client.entity.CfOrganization;
 import org.trustedanalytics.platformsnapshot.client.entity.CfSpace;
 import rx.Observable;
@@ -44,4 +45,7 @@ public interface CfOperations {
 
     @RequestLine("GET /v2/organizations?q={orgName}")
     Observable<CfOrganization> getOrganization(@Param("orgName") String orgName);
+
+    @RequestLine("GET /v2/info")
+    Observable<CfInfo> getCfInfo();
 }

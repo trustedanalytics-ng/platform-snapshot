@@ -16,6 +16,7 @@
 package org.trustedanalytics.platformsnapshot.client;
 
 import org.trustedanalytics.platformsnapshot.client.entity.CfApplication;
+import org.trustedanalytics.platformsnapshot.client.entity.CfInfo;
 import org.trustedanalytics.platformsnapshot.client.entity.CfOrganization;
 import org.trustedanalytics.platformsnapshot.client.entity.CfSpace;
 import org.trustedanalytics.platformsnapshot.client.decoder.CcRxDecoder;
@@ -83,5 +84,10 @@ public class CfRxClient implements CfOperations {
     @Override
     public Observable<CfOrganization> getOrganization(String orgName) {
         return cfOperations.getOrganization(orgName);
+    }
+
+    @Override
+    public Observable<CfInfo> getCfInfo() {
+        return cfOperations.getCfInfo();
     }
 }

@@ -19,6 +19,7 @@ import org.trustedanalytics.platformsnapshot.client.CfOperations;
 import org.trustedanalytics.platformsnapshot.client.PlatformContext;
 import org.trustedanalytics.platformsnapshot.client.PlatformContextOperations;
 import org.trustedanalytics.platformsnapshot.client.cdh.CdhOperations;
+import org.trustedanalytics.platformsnapshot.client.entity.CfInfo;
 import org.trustedanalytics.platformsnapshot.model.CdhServiceArtifact;
 import org.trustedanalytics.platformsnapshot.client.cdh.entity.CdhCluster;
 import org.trustedanalytics.platformsnapshot.model.CfApplicationArtifact;
@@ -91,7 +92,7 @@ public class PlatformSnapshotScheduler {
             cf.getSpaces()
               .flatMap(s -> applications(s.getEntity().getOrganizationGuid(), s.getMetadata().getGuid(), coreOrg))
               .toList()
-              .map(apps -> new PlatformSnapshot(new Date(), context.getPlatformVersion(), apps, cdhCluster.getFullVersion(), cdhServices(cdhCluster.getName())))
+              .map(apps -> new PlatformSnapshot(new Date(), context.getPlatformVersion(), apps, cdhCluster.getFullVersion(), cfInfo().getApiVersion(), cdhServices(cdhCluster.getName())))
               .doOnNext(snapshot -> LOG.info("Persisting platform snapshot: {}", LocalDateTime.now()))
               .map(repository::save)
               .subscribe(snapshot -> LOG.info("Platform snapshot completed: {}", LocalDateTime.now()));
@@ -109,5 +110,9 @@ public class PlatformSnapshotScheduler {
             .stream()
             .map(CdhServiceArtifact::new)
             .collect(Collectors.toList());
+    }
+
+    private CfInfo cfInfo() {
+        return cf.getCfInfo().toBlocking().first();
     }
 }
