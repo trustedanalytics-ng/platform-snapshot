@@ -23,6 +23,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.time.ZoneOffset;
 import java.util.Date;
+import java.util.Optional;
 import java.util.UUID;
 
 import javax.persistence.CascadeType;
@@ -75,7 +76,7 @@ public class CfApplicationArtifact implements CfAccountArtifact {
         this.setGuid(metadata.getGuid());
         this.setVersion(entity.getVersion());
         this.setCreatedAt(Date.from(metadata.getCreatedAt().toInstant(ZoneOffset.UTC)));
-        this.setUpdatedAt(Date.from(metadata.getCreatedAt().toInstant(ZoneOffset.UTC)));
+        this.setUpdatedAt(Optional.ofNullable(metadata.getUpdatedAt()).map(date -> Date.from(date.toInstant(ZoneOffset.UTC))).orElse(null));
         this.setName(entity.getName());
         this.setOrganization(organization);
         this.setSpace(entity.getSpaceGuid());

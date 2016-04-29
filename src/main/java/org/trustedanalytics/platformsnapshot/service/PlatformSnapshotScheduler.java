@@ -23,6 +23,7 @@ import org.trustedanalytics.platformsnapshot.client.entity.CfInfo;
 import org.trustedanalytics.platformsnapshot.model.CdhServiceArtifact;
 import org.trustedanalytics.platformsnapshot.client.cdh.entity.CdhCluster;
 import org.trustedanalytics.platformsnapshot.model.CfApplicationArtifact;
+import org.trustedanalytics.platformsnapshot.model.CfServiceArtifact;
 import org.trustedanalytics.platformsnapshot.model.PlatformSnapshot;
 import org.trustedanalytics.platformsnapshot.model.Scope;
 import org.trustedanalytics.platformsnapshot.persistence.PlatformSnapshotRepository;
@@ -92,7 +93,13 @@ public class PlatformSnapshotScheduler {
             cf.getSpaces()
               .flatMap(s -> applications(s.getEntity().getOrganizationGuid(), s.getMetadata().getGuid(), coreOrg))
               .toList()
-              .map(apps -> new PlatformSnapshot(new Date(), context.getPlatformVersion(), apps, cdhCluster.getFullVersion(), cfInfo().getApiVersion(), cdhServices(cdhCluster.getName())))
+              .map(apps -> new PlatformSnapshot(new Date(),
+                                                context.getPlatformVersion(),
+                                                apps,
+                                                cdhCluster.getFullVersion(),
+                                                cfInfo().getApiVersion(),
+                                                cdhServices(cdhCluster.getName()),
+                                                cfServices()))
               .doOnNext(snapshot -> LOG.info("Persisting platform snapshot: {}", LocalDateTime.now()))
               .map(repository::save)
               .subscribe(snapshot -> LOG.info("Platform snapshot completed: {}", LocalDateTime.now()));
@@ -112,7 +119,17 @@ public class PlatformSnapshotScheduler {
             .collect(Collectors.toList());
     }
 
+    private Collection<CfServiceArtifact> cfServices() {
+        return cf.getServices()
+            .map(CfServiceArtifact::new)
+            .toList()
+            .toBlocking()
+            .first();
+    }
+
     private CfInfo cfInfo() {
-        return cf.getCfInfo().toBlocking().first();
+        return cf.getCfInfo()
+            .toBlocking()
+            .first();
     }
 }

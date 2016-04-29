@@ -22,6 +22,7 @@ import feign.RequestLine;
 import org.trustedanalytics.platformsnapshot.client.entity.CfApplication;
 import org.trustedanalytics.platformsnapshot.client.entity.CfInfo;
 import org.trustedanalytics.platformsnapshot.client.entity.CfOrganization;
+import org.trustedanalytics.platformsnapshot.client.entity.CfService;
 import org.trustedanalytics.platformsnapshot.client.entity.CfSpace;
 import rx.Observable;
 
@@ -48,4 +49,10 @@ public interface CfOperations {
 
     @RequestLine("GET /v2/info")
     Observable<CfInfo> getCfInfo();
+
+    @RequestLine("GET /v2/services")
+    Observable<CfService> getServices();
+
+    @RequestLine("GET")
+    Observable<CfService> getServices(URI uri);
 }
