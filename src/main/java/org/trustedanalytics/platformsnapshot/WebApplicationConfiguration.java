@@ -30,6 +30,6 @@ public class WebApplicationConfiguration extends WebMvcConfigurerAdapter {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new AdminInterceptor(tokenSupplier)).addPathPatterns("/rest/**");
+        registry.addInterceptor(new AdminInterceptor(tokenSupplier)).addPathPatterns("/rest/v1/snapshots/**");
     }
 }

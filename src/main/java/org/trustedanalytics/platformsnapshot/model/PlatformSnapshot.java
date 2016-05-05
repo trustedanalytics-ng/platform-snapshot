@@ -22,11 +22,11 @@ import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -35,6 +35,7 @@ import lombok.NoArgsConstructor;
 
 
 @Entity
+@Table(name = "PLATFORM_SNAPSHOT")
 @Data
 @Builder
 @NoArgsConstructor
@@ -53,13 +54,13 @@ public class PlatformSnapshot {
 
     private String cfVersion;
 
-    @OneToMany(mappedBy = "snapshot", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "snapshot", cascade = CascadeType.ALL)
     private Collection<CfApplicationArtifact> applications;
 
-    @OneToMany(mappedBy = "snapshot", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "snapshot", cascade = CascadeType.ALL)
     private Collection<CdhServiceArtifact> cdhServices;
 
-    @OneToMany(mappedBy = "snapshot", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "snapshot", cascade = CascadeType.ALL)
     private Collection<CfServiceArtifact> cfServices;
 
     public PlatformSnapshot(Date createdAt,

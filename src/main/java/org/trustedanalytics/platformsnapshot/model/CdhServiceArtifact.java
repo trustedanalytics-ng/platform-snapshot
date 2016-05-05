@@ -20,15 +20,16 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.trustedanalytics.platformsnapshot.client.cdh.entity.CdhService;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 @Data
+@Table(name = "CDH_SERVICE_ARTIFACT")
 @NoArgsConstructor
 @Entity
 public class CdhServiceArtifact {
@@ -37,7 +38,8 @@ public class CdhServiceArtifact {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch= FetchType.LAZY, cascade = CascadeType.DETACH)
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "snapshot_id")
     @JsonIgnore
     private PlatformSnapshot snapshot;
     private String name;

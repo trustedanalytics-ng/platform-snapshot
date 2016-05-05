@@ -26,18 +26,19 @@ import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
+@Table(name = "CF_APPLICATION_ARTIFACT")
 @NoArgsConstructor
 @Entity
 public class CfApplicationArtifact implements CfAccountArtifact {
@@ -46,7 +47,8 @@ public class CfApplicationArtifact implements CfAccountArtifact {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch=FetchType.LAZY, cascade = CascadeType.DETACH)
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "snapshot_id")
     @JsonIgnore
     private PlatformSnapshot snapshot;
     private UUID guid;

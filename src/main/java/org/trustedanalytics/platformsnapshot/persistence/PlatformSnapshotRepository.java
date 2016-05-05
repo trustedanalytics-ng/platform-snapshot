@@ -29,4 +29,5 @@ public interface PlatformSnapshotRepository extends CrudRepository<PlatformSnaps
     @Query("select p from PlatformSnapshot p where p.createdAt between ?1 and ?2 order by p.createdAt desc")
     Collection<PlatformSnapshot> findByDates(Date from, Date to);
 
+    PlatformSnapshot findTopByOrderByCreatedAtDesc();
 }

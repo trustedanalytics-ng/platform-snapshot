@@ -33,6 +33,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.sql.Date;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Optional;
@@ -70,6 +71,20 @@ public class PlatformSnapshotController {
             .stream()
             .map(snapshot -> snapshot.filter(scope.orElse(Scope.ALL)))
             .collect(Collectors.toList());
+    }
+
+    @ApiOperation(
+        value = "Get platform components versions",
+        notes = "Privilege level: Consumer of this endpoint must be a user."
+    )
+    @RequestMapping(value = "/rest/v1/versions", method = GET, produces = APPLICATION_JSON_VALUE)
+    public PlatformSnapshot getPlatformSnapshotSummary() {
+
+        PlatformSnapshot platformSnapshot = platformSnapshotRepository.findTopByOrderByCreatedAtDesc();
+        platformSnapshot.setApplications(new ArrayList<>());
+        platformSnapshot.setCdhServices(new ArrayList<>());
+        platformSnapshot.setCfServices(new ArrayList<>());
+        return platformSnapshot;
     }
 
     @ApiOperation(

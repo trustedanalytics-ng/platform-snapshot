@@ -22,13 +22,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.trustedanalytics.platformsnapshot.client.entity.CfService;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 import java.time.ZoneOffset;
 import java.util.Date;
@@ -36,6 +36,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Data
+@Table(name = "CF_SERVICE_ARTIFACT")
 @NoArgsConstructor
 @Entity
 public class CfServiceArtifact {
@@ -46,7 +47,8 @@ public class CfServiceArtifact {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch= FetchType.LAZY, cascade = CascadeType.DETACH)
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "snapshot_id")
     @JsonIgnore
     private PlatformSnapshot snapshot;
     private String label;
