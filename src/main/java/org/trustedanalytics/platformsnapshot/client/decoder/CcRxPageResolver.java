@@ -34,6 +34,9 @@ public class CcRxPageResolver implements BiFunction<URI, CfRxClient, Observable<
         if(path.startsWith("/v2/spaces")) {
             return cfRxClient.getSpaces(uri);
         }
+        if(path.startsWith("/v2/services")) {
+            return cfRxClient.getServices(uri);
+        }
 
         throw new IllegalStateException("Unable to resolve page: " + uri);
     }
