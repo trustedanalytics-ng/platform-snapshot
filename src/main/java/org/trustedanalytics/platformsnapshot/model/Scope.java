@@ -24,7 +24,7 @@ public enum Scope {
     ALL;
 
     public static Scope resolve(UUID core, UUID org) {
-        if(core.equals(org)) {
+        if(org.equals(core)) {
             return Scope.CORE;
         }
         return Scope.OTHER;

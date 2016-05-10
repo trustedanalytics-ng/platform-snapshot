@@ -19,9 +19,9 @@ import org.trustedanalytics.platformsnapshot.client.CfOperations;
 import org.trustedanalytics.platformsnapshot.client.PlatformContext;
 import org.trustedanalytics.platformsnapshot.client.PlatformContextOperations;
 import org.trustedanalytics.platformsnapshot.client.cdh.CdhOperations;
+import org.trustedanalytics.platformsnapshot.client.cdh.entity.CdhCluster;
 import org.trustedanalytics.platformsnapshot.client.entity.CfInfo;
 import org.trustedanalytics.platformsnapshot.model.CdhServiceArtifact;
-import org.trustedanalytics.platformsnapshot.client.cdh.entity.CdhCluster;
 import org.trustedanalytics.platformsnapshot.model.CfApplicationArtifact;
 import org.trustedanalytics.platformsnapshot.model.CfServiceArtifact;
 import org.trustedanalytics.platformsnapshot.model.PlatformSnapshot;
@@ -34,14 +34,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Collection;
 import java.util.Date;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
@@ -73,7 +71,7 @@ public class PlatformSnapshotScheduler {
     @PostConstruct
     private void schedule() {
         LOG.info("Scheduling platform snapshot: {}", LocalDateTime.now());
-        executor.scheduleAtFixedRate(snapshotTask(), 1, 8, TimeUnit.HOURS);
+        executor.scheduleAtFixedRate(snapshotTask(), 1, 24, TimeUnit.HOURS);
     }
 
     public void trigger() {
@@ -85,51 +83,74 @@ public class PlatformSnapshotScheduler {
         return () -> {
             LOG.info("Performing platform snapshot: {}", LocalDateTime.now());
 
-            final PlatformContext context = ctx.getPlatformContext();
-            LOG.info("Platform context: {}", context);
-            final UUID coreOrg = cf.getOrganization("name:" + context.getCoreOrganization()).toBlocking().single().getMetadata().getGuid();
-            final CdhCluster cdhCluster = cdhOperations.getCdhClusters().getItems().stream().findFirst().get();
+            final PlatformContext context = platformContext();
+            final UUID coreOrg = coreOrganization(context);
+            final CdhCluster cdhCluster = cdhCluster();
 
-            cf.getSpaces()
-              .flatMap(s -> applications(s.getEntity().getOrganizationGuid(), s.getMetadata().getGuid(), coreOrg))
-              .toList()
-              .map(apps -> new PlatformSnapshot(new Date(),
-                                                context.getPlatformVersion(),
-                                                apps,
-                                                cdhCluster.getFullVersion(),
-                                                cfInfo().getApiVersion(),
-                                                cdhServices(cdhCluster.getName()),
-                                                cfServices()))
-              .doOnNext(snapshot -> LOG.info("Persisting platform snapshot: {}", LocalDateTime.now()))
-              .map(repository::save)
-              .subscribe(snapshot -> LOG.info("Platform snapshot completed: {}", LocalDateTime.now()));
+            // @formatter:off
+            Observable.zip(cfApplications(coreOrg).toList(), cfServices().toList(), cdhServices(cdhCluster.getName()).toList(), cfInfo(),
+                (cfApps, cfServices, cdhServices, cfInfo) ->
+                    new PlatformSnapshot(
+                        new Date(),
+                        context.getPlatformVersion(),
+                        cfApps,
+                        cdhCluster.getFullVersion(),
+                        cfInfo.getApiVersion(),
+                        cdhServices,
+                        cfServices))
+            .doOnNext(snapshot -> LOG.info("Persisting platform snapshot: {}", LocalDateTime.now()))
+            .map(repository::save)
+            .subscribe(snapshot -> LOG.info("Platform snapshot completed: {}", LocalDateTime.now()));
+            // @formatter:on
         };
     }
 
-    private Observable<CfApplicationArtifact> applications(UUID organization, UUID space, UUID coreOrg) {
-        return Observable.defer(() -> cf.getApplications(space))
-                .map(app -> new CfApplicationArtifact(app, organization, Scope.resolve(coreOrg, organization)))
-                .subscribeOn(Schedulers.io());
+    private PlatformContext platformContext() {
+        return Observable.defer(() -> Observable.just(ctx.getPlatformContext()))
+            .onErrorResumeNext(Observable.just(new PlatformContext()))
+            .doOnNext(context -> LOG.info("Platform context: {}", context))
+            .toBlocking().single();
     }
 
-    private Collection<CdhServiceArtifact> cdhServices(String clusterName) {
-        return cdhOperations.getCdhServices(clusterName).getItems()
-            .stream()
+    private UUID coreOrganization(PlatformContext context) {
+        return Observable.defer(() -> cf.getOrganization("name:" + context.getCoreOrganization()))
+            .map(org -> org.getMetadata().getGuid())
+            .switchIfEmpty(Observable.just(null))
+            .onErrorResumeNext(Observable.just(null))
+            .doOnNext(organization -> LOG.info("Core organization: {}", organization))
+            .toBlocking().single();
+    }
+
+    private CdhCluster cdhCluster() {
+        return Observable.defer(() -> Observable.from(cdhOperations.getCdhClusters().getItems()))
+            .first()
+            .onErrorResumeNext(Observable.just(new CdhCluster()))
+            .doOnNext(cluster -> LOG.info("CDH cluster: {}", cluster))
+            .toBlocking().single();
+    }
+
+    private Observable<CfApplicationArtifact> cfApplications(UUID coreOrg) {
+        return cf.getSpaces()
+            .flatMap(s -> Observable.defer(() -> cf.getApplications(s.getMetadata().getGuid()))
+                .map(app -> new CfApplicationArtifact(app, s.getEntity().getOrganizationGuid(), Scope.resolve(coreOrg, s.getEntity().getOrganizationGuid())))
+                .onErrorResumeNext(Observable.empty())
+                .subscribeOn(Schedulers.io()));
+    }
+
+    private Observable<CdhServiceArtifact> cdhServices(String clusterName) {
+        return Observable.from(cdhOperations.getCdhServices(clusterName).getItems())
             .map(CdhServiceArtifact::new)
-            .collect(Collectors.toList());
+            .onErrorResumeNext(Observable.empty());
     }
 
-    private Collection<CfServiceArtifact> cfServices() {
+    private Observable<CfServiceArtifact> cfServices() {
         return cf.getServices()
             .map(CfServiceArtifact::new)
-            .toList()
-            .toBlocking()
-            .first();
+            .onErrorResumeNext(Observable.empty());
     }
 
-    private CfInfo cfInfo() {
+    private Observable<CfInfo> cfInfo() {
         return cf.getCfInfo()
-            .toBlocking()
-            .first();
+            .onErrorResumeNext(Observable.just(new CfInfo()));
     }
 }
