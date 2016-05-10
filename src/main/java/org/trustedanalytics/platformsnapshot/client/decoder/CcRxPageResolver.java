@@ -15,27 +15,27 @@
  */
 package org.trustedanalytics.platformsnapshot.client.decoder;
 
-import org.trustedanalytics.platformsnapshot.client.CfRxClient;
+import org.trustedanalytics.platformsnapshot.client.CfOperations;
 
 import java.net.URI;
 import java.util.function.BiFunction;
 
 import rx.Observable;
 
-public class CcRxPageResolver implements BiFunction<URI, CfRxClient, Observable<?>> {
+public class CcRxPageResolver implements BiFunction<URI, CfOperations, Observable<?>> {
 
     @Override
-    public Observable<?> apply(URI uri, CfRxClient cfRxClient) {
+    public Observable<?> apply(URI uri, CfOperations cfOperations) {
         final String path = uri.toString();
 
         if(path.startsWith("/v2/spaces") && path.endsWith("/apps")) {
-            return cfRxClient.getApplications(uri);
+            return cfOperations.getApplications(uri);
         }
         if(path.startsWith("/v2/spaces")) {
-            return cfRxClient.getSpaces(uri);
+            return cfOperations.getSpaces(uri);
         }
         if(path.startsWith("/v2/services")) {
-            return cfRxClient.getServices(uri);
+            return cfOperations.getServices(uri);
         }
 
         throw new IllegalStateException("Unable to resolve page: " + uri);
