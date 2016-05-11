@@ -1,0 +1,39 @@
+{
+  "total_results": 63,
+  "total_pages": 2,
+  "prev_url": null,
+  "next_url": "/v2/services?order-direction=asc&page=2&results-per-page=50",
+  "resources": [
+    {
+      "metadata": {
+        "guid": "9b213bd9-a54f-4f41-abb4-dd12e7e50814",
+        "url": "/v2/services/9b213bd9-a54f-4f41-abb4-dd12e7e50814",
+        "created_at": "2016-05-09T17:37:45Z",
+        "updated_at": "2016-05-10T09:30:33Z"
+      },
+      "entity": {
+        "label": "postgresql93",
+        "provider": null,
+        "url": null,
+        "description": "PostgreSQL 9.3 service for application development and testing",
+        "long_description": null,
+        "version": null,
+        "info_url": null,
+        "active": true,
+        "bindable": true,
+        "unique_id": "2fd814ac-d1fa-4d4a-a4f7-d386cd8fd8e3",
+        "extra": null,
+        "tags": [
+          "postgresql93",
+          "postgresql",
+          "relational"
+        ],
+        "requires": [],
+        "documentation_url": null,
+        "service_broker_guid": "3dc79fad-6e85-4698-bcd2-88f03a2da25b",
+        "plan_updateable": true,
+        "service_plans_url": "/v2/services/9b213bd9-a54f-4f41-abb4-dd12e7e50814/service_plans"
+      }
+    }
+  ]
+}

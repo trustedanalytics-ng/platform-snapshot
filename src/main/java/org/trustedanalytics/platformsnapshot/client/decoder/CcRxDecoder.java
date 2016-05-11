@@ -15,7 +15,7 @@
  */
 package org.trustedanalytics.platformsnapshot.client.decoder;
 
-import org.trustedanalytics.platformsnapshot.client.CfRxClient;
+import org.trustedanalytics.platformsnapshot.client.CfOperations;
 import org.trustedanalytics.platformsnapshot.client.entity.CfPage;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -30,18 +30,19 @@ import java.io.IOException;
 import java.io.Reader;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.Objects;
 
 import rx.Observable;
 
 public class CcRxDecoder implements Decoder {
     private static final int BUFFER_SIZE = 32;
-    private final CfRxClient client;
+    private final CfOperations client;
     private final CcRxPageResolver resolver;
     private final ObjectMapper mapper;
 
-    public CcRxDecoder(CfRxClient client, ObjectMapper mapper) {
-        this.client = client;
-        this.mapper = mapper;
+    public CcRxDecoder(CfOperations client, ObjectMapper mapper) {
+        this.client = Objects.requireNonNull(client, "client");
+        this.mapper = Objects.requireNonNull(mapper, "mapper");
         this.resolver = new CcRxPageResolver();
     }
 
