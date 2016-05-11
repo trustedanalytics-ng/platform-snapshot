@@ -21,7 +21,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.convert.converter.Converter;
 
-import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -36,7 +35,7 @@ public class LocalDateTimeDeserializer extends FromStringDeserializer<LocalDateT
     }
 
     @Override
-    protected LocalDateTime _deserialize(String value, DeserializationContext ctxt) throws IOException {
+    protected LocalDateTime _deserialize(String value, DeserializationContext ctxt) {
         return doConvert(value);
     }
 
