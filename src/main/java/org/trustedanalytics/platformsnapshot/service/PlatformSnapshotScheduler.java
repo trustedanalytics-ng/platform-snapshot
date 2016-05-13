@@ -105,14 +105,14 @@ public class PlatformSnapshotScheduler {
         };
     }
 
-    private PlatformContext platformContext() {
+    PlatformContext platformContext() {
         return Observable.defer(() -> Observable.just(ctx.getPlatformContext()))
             .onErrorResumeNext(Observable.just(new PlatformContext()))
             .doOnNext(context -> LOG.info("Platform context: {}", context))
             .toBlocking().single();
     }
 
-    private UUID coreOrganization(PlatformContext context) {
+    UUID coreOrganization(PlatformContext context) {
         return Observable.defer(() -> cf.getOrganization("name:" + context.getCoreOrganization()))
             .map(org -> org.getMetadata().getGuid())
             .switchIfEmpty(Observable.just(null))
@@ -121,7 +121,7 @@ public class PlatformSnapshotScheduler {
             .toBlocking().single();
     }
 
-    private CdhCluster cdhCluster() {
+    CdhCluster cdhCluster() {
         return Observable.defer(() -> Observable.from(cdhOperations.getCdhClusters().getItems()))
             .first()
             .onErrorResumeNext(Observable.just(new CdhCluster()))
@@ -129,7 +129,7 @@ public class PlatformSnapshotScheduler {
             .toBlocking().single();
     }
 
-    private Observable<CfApplicationArtifact> cfApplications(UUID coreOrg) {
+    Observable<CfApplicationArtifact> cfApplications(UUID coreOrg) {
         return cf.getSpaces()
             .flatMap(s -> Observable.defer(() -> cf.getApplications(s.getMetadata().getGuid()))
                 .map(app -> new CfApplicationArtifact(app, s.getEntity().getOrganizationGuid(), Scope.resolve(coreOrg, s.getEntity().getOrganizationGuid())))
@@ -137,19 +137,19 @@ public class PlatformSnapshotScheduler {
                 .subscribeOn(Schedulers.io()));
     }
 
-    private Observable<CdhServiceArtifact> cdhServices(String clusterName) {
+    Observable<CdhServiceArtifact> cdhServices(String clusterName) {
         return Observable.from(cdhOperations.getCdhServices(clusterName).getItems())
             .map(CdhServiceArtifact::new)
             .onErrorResumeNext(Observable.empty());
     }
 
-    private Observable<CfServiceArtifact> cfServices() {
+    Observable<CfServiceArtifact> cfServices() {
         return cf.getServices()
             .map(CfServiceArtifact::new)
             .onErrorResumeNext(Observable.empty());
     }
 
-    private Observable<CfInfo> cfInfo() {
+    Observable<CfInfo> cfInfo() {
         return cf.getCfInfo()
             .onErrorResumeNext(Observable.just(new CfInfo()));
     }
