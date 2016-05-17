@@ -15,6 +15,8 @@
  */
 package org.trustedanalytics.platformsnapshot.security;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
@@ -23,10 +25,13 @@ import org.springframework.security.oauth2.provider.authentication.OAuth2Authent
 import java.util.function.Supplier;
 
 public class OAuth2TokenSupplier implements Supplier<String> {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(OAuth2TokenSupplier.class);
+
     @Override
     public String get() {
         final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        System.out.println(authentication);
+        LOGGER.info(authentication.toString());
         final OAuth2Authentication oauth2 = (OAuth2Authentication) authentication;
         final OAuth2AuthenticationDetails details = (OAuth2AuthenticationDetails) oauth2.getDetails();
         return details.getTokenValue();

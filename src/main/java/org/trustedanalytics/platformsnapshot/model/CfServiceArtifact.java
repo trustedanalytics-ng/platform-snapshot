@@ -18,8 +18,6 @@ package org.trustedanalytics.platformsnapshot.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.trustedanalytics.platformsnapshot.client.entity.CfService;
 
 import javax.persistence.Entity;
@@ -40,8 +38,6 @@ import java.util.UUID;
 @NoArgsConstructor
 @Entity
 public class CfServiceArtifact {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(CfServiceArtifact.class);
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)

@@ -21,7 +21,6 @@ import org.trustedanalytics.platformsnapshot.client.entity.CfPage;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.RuntimeJsonMappingException;
 
-import feign.FeignException;
 import feign.Response;
 import feign.codec.Decoder;
 
@@ -47,7 +46,7 @@ public class CcRxDecoder implements Decoder {
     }
 
     @Override
-    public Object decode(Response response, Type type) throws IOException, FeignException {
+    public Object decode(Response response, Type type) throws IOException {
         if (response.body() == null) {
             return null;
         }
