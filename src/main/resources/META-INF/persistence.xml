@@ -1,0 +1,18 @@
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://java.sun.com/xml/ns/persistence
+                      http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
+             version="2.0">
+    <persistence-unit name="openjpa">
+        <provider>org.apache.openjpa.persistence.PersistenceProviderImpl</provider>
+        <class>org.trustedanalytics.platformsnapshot.model.PlatformSnapshot</class>
+        <class>org.trustedanalytics.platformsnapshot.model.CdhServiceArtifact</class>
+        <class>org.trustedanalytics.platformsnapshot.model.CfAccountArtifact</class>
+        <class>org.trustedanalytics.platformsnapshot.model.CfApplicationArtifact</class>
+        <class>org.trustedanalytics.platformsnapshot.model.CfServiceArtifact</class>
+
+        <properties>
+            <property name="openjpa.Log" value="DefaultLevel=WARN, Runtime=INFO, Tool=INFO, SQL=TRACE"/>
+        </properties>
+    </persistence-unit>
+</persistence>

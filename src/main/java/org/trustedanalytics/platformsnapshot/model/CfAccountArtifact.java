@@ -16,12 +16,13 @@
 package org.trustedanalytics.platformsnapshot.model;
 
 
+import java.io.Serializable;
 import java.util.UUID;
 
 /**
  * Representation of artifact in cloud foundry that belongs to given organization and space
  */
-public interface CfAccountArtifact extends PlatformArtifact {
+public interface CfAccountArtifact extends PlatformArtifact, Serializable {
 
     UUID getOrganization();
 

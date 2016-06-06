@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <artifactId>platform-snapshot</artifactId>
-    <version>0.5.0</version>
+    <version>0.5.1</version>
 
     <parent>
         <groupId>org.trustedanalytics</groupId>
@@ -29,10 +29,6 @@
             <artifactId>spring-security-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.springframework.security.oauth</groupId>
             <artifactId>spring-security-oauth2</artifactId>
         </dependency>
@@ -54,6 +50,32 @@
             <scope>test</scope>
         </dependency>
         <!-- Utils -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+            <exclusions>
+                <exclusion>
+                    <artifactId>hibernate-entitymanager</artifactId>
+                    <groupId>org.hibernate</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <!-- http://mvnrepository.com/artifact/org.apache.openjpa/openjpa -->
+        <dependency>
+            <groupId>org.apache.openjpa</groupId>
+            <artifactId>openjpa</artifactId>
+            <version>2.4.1</version>
+        </dependency>
+
+        <!-- http://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-aop -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
+
+
+
         <dependency>
             <groupId>io.reactivex</groupId>
             <artifactId>rxjava</artifactId>
@@ -122,6 +144,34 @@
             </resource>
         </resources>
         <plugins>
+
+            <plugin>
+                <groupId>org.apache.openjpa</groupId>
+                <artifactId>openjpa-maven-plugin</artifactId>
+                <version>2.4.1</version>
+                <configuration>
+                    <includes>**/model/*.class</includes>
+                    <addDefaultConstructor>true</addDefaultConstructor>
+                    <enforcePropertyRestrictions>true</enforcePropertyRestrictions>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>enhancer</id>
+                        <phase>process-classes</phase>
+                        <goals>
+                            <goal>enhance</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.openjpa</groupId>
+                        <artifactId>openjpa</artifactId>
+
+                        <version>2.4.1</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>

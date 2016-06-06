@@ -132,7 +132,7 @@ public class PlatformSnapshotScheduler {
     Observable<CfApplicationArtifact> cfApplications(UUID coreOrg) {
         return cf.getSpaces()
             .flatMap(s -> Observable.defer(() -> cf.getApplications(s.getMetadata().getGuid()))
-                .map(app -> new CfApplicationArtifact(app, s.getEntity().getOrganizationGuid(), Scope.resolve(coreOrg, s.getEntity().getOrganizationGuid())))
+                .map(app -> new CfApplicationArtifact(app, s.getEntity().getOrganizationGuid(), Scope.resolve(coreOrg, s.getEntity().getOrganizationGuid()).toString()))
                 .onErrorResumeNext(Observable.empty())
                 .subscribeOn(Schedulers.io()));
     }

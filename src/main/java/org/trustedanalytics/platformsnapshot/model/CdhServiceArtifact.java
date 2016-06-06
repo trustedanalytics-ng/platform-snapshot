@@ -20,19 +20,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.trustedanalytics.platformsnapshot.client.cdh.entity.CdhService;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.io.Serializable;
 
 @Data
 @Table(name = "CDH_SERVICE_ARTIFACT")
 @NoArgsConstructor
 @Entity
-public class CdhServiceArtifact {
+public class CdhServiceArtifact implements Serializable {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
@@ -40,13 +35,18 @@ public class CdhServiceArtifact {
     private Long id;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "snapshot_id")
+    @JoinColumn(name = "SNAPSHOT_ID")
     @JsonIgnore
     private PlatformSnapshot snapshot;
+    @Column(name="NAME")
     private String name;
+    @Column(name="TYPE")
     private String type;
+    @Column(name="SERVICE_STATE")
     private String serviceState;
+    @Column(name="HEALTH_SUMMARY")
     private String healthSummary;
+    @Column(name="ENTITY_STATUS")
     private String entityStatus;
 
     public CdhServiceArtifact(CdhService cdhService) {

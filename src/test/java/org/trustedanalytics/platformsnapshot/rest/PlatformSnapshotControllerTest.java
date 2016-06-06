@@ -131,9 +131,9 @@ public class PlatformSnapshotControllerTest {
         Collection<CfApplicationArtifact> cfApplicationArtifacts = new ArrayList<>();
 
         CfApplicationArtifact cfApplicationArtifact1 = new CfApplicationArtifact();
-        cfApplicationArtifact1.setGuid(UUID.randomUUID());
+        cfApplicationArtifact1.setGuid(UUID.randomUUID().toString());
         CfApplicationArtifact cfApplicationArtifact2 = new CfApplicationArtifact();
-        cfApplicationArtifact2.setGuid(UUID.randomUUID());
+        cfApplicationArtifact2.setGuid(UUID.randomUUID().toString());
 
         cfApplicationArtifacts.add(cfApplicationArtifact1);
         cfApplicationArtifacts.add(cfApplicationArtifact2);

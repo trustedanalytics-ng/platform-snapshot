@@ -15,18 +15,13 @@
  */
 package org.trustedanalytics.platformsnapshot.model;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -40,18 +35,22 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PlatformSnapshot {
+public class PlatformSnapshot implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name="PLATFORM_VERSION")
     private String platformVersion;
 
+    @Column(name="CREATED_At")
     private Date createdAt;
 
+    @Column(name="CDH_VERSION")
     private String cdhVersion;
 
+    @Column(name="CF_VERSION")
     private String cfVersion;
 
     @OneToMany(mappedBy = "snapshot", cascade = CascadeType.ALL)

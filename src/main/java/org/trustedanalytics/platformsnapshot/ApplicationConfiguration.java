@@ -109,4 +109,6 @@ public class ApplicationConfiguration {
             .requestInterceptor(template -> template.header("Authorization", "bearer " + token))
             .logLevel(Logger.Level.BASIC), cfApiUrl);
     }
+
+
 }

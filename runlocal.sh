@@ -34,10 +34,10 @@ if [ $CF_COPYENV -eq 0 ]; then
   rm -fr ./copyenv
 fi
 
-ENV_STRING=`cf copyenv artifact-discovery`
-VCAP=`echo $ENV_STRING|sed 's/[;]//g'`
-`$VCAP`
+#ENV_STRING=`cf copyenv platform-snapshot`
+#VCAP=`echo $ENV_STRING|sed 's/[;]//g'`
+#`$VCAP`
 
-echo $VCAP_SERVICES |jq .
+echo $VCAP_SERVICES
 
 mvn spring-boot:run -Dspring.profiles.active=local -Dserver.port=8080

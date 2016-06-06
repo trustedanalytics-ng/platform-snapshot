@@ -15,9 +15,10 @@
  */
 package org.trustedanalytics.platformsnapshot.model;
 
+import java.io.Serializable;
 import java.util.UUID;
 
-public enum Scope {
+public enum Scope implements Serializable{
     CORE,
     DEMO,
     OTHER,

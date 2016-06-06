@@ -52,6 +52,11 @@ server.port: 8080
 security:
   ignored: /rest/**,/rest/test,/console/**,/console,/test,/**,/*.js,/sdoc.jsp,/api-docs,/api-docs/default/*,/images/*,/lib/*,/css/*,/v2/api-docs
 
+
+
+services:
+  platform-context: ${vcap.services.platformcontext.credentials.host}
+
 logging:
   level:
     org.springframework.security: DEBUG
@@ -82,6 +87,8 @@ spring.datasource: platform=postgres
 spring.jpa.show-sql: true
 spring.jpa.hibernate.ddl-auto: ""
 spring.database.driverClassName: org.postgresql.Driver
-spring.datasource.url: "jdbc:postgresql://172.17.0.3:5432/postgres"
+spring.datasource.url: " ${postgres.jdbc.string}"
 spring.datasource.username: postgres
 spring.datasource.password: postgres
+
+

@@ -18,12 +18,32 @@ package org.trustedanalytics.platformsnapshot;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration;
 import org.springframework.cloud.security.oauth2.resource.EnableOAuth2Resource;
+import org.springframework.orm.jpa.vendor.AbstractJpaVendorAdapter;
+import org.springframework.orm.jpa.vendor.EclipseLinkJpaVendorAdapter;
+import org.springframework.orm.jpa.vendor.OpenJpaVendorAdapter;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @EnableOAuth2Resource
 @SpringBootApplication
-public class Application {
+public class Application extends JpaBaseConfiguration {
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
+    }
+
+    @Override
+    protected AbstractJpaVendorAdapter createJpaVendorAdapter() {
+        return new OpenJpaVendorAdapter();
+    }
+
+    @Override
+    protected Map<String, Object> getVendorProperties() {
+        Map<String,Object> properties = new HashMap<>();
+        properties.put("openjpa.DynamicEnhancementAgent","false");
+        properties.put("openjpa.RuntimeUnenhancedClasses","supported");
+        return new HashMap<>();
     }
 }
