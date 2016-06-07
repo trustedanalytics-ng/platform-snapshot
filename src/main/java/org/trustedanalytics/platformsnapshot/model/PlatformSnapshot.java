@@ -21,13 +21,19 @@ import java.util.Date;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 
 @Entity
 @Table(name = "PLATFORM_SNAPSHOT")
@@ -85,7 +91,7 @@ public class PlatformSnapshot implements Serializable {
 
     public PlatformSnapshot filter(Scope scope) {
         final Predicate<CfApplicationArtifact> predicate =
-            app -> Scope.ALL.equals(scope) || scope.equals(app.getScope());
+            app -> Scope.ALL.equals(scope) || scope.toString().equals(app.getScope());
 
         return PlatformSnapshot.builder()
             .id(id)

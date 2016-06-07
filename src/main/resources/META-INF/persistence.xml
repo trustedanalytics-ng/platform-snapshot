@@ -7,7 +7,6 @@
         <provider>org.apache.openjpa.persistence.PersistenceProviderImpl</provider>
         <class>org.trustedanalytics.platformsnapshot.model.PlatformSnapshot</class>
         <class>org.trustedanalytics.platformsnapshot.model.CdhServiceArtifact</class>
-        <class>org.trustedanalytics.platformsnapshot.model.CfAccountArtifact</class>
         <class>org.trustedanalytics.platformsnapshot.model.CfApplicationArtifact</class>
         <class>org.trustedanalytics.platformsnapshot.model.CfServiceArtifact</class>
 
