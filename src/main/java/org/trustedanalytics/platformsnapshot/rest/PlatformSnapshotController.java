@@ -22,6 +22,7 @@ import org.trustedanalytics.platformsnapshot.model.PlatformSnapshotConfiguration
 import org.trustedanalytics.platformsnapshot.model.PlatformSnapshot;
 import org.trustedanalytics.platformsnapshot.model.Scope;
 import org.trustedanalytics.platformsnapshot.persistence.PlatformSnapshotRepository;
+import org.trustedanalytics.platformsnapshot.persistence.PlatformSnapshotTransactions;
 import org.trustedanalytics.platformsnapshot.service.PlatformSnapshotScheduler;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,12 +46,15 @@ import io.swagger.annotations.ApiOperation;
 public class PlatformSnapshotController {
     private final PlatformSnapshotRepository platformSnapshotRepository;
     private final PlatformSnapshotScheduler platformSnapshotScheduler;
+    private final PlatformSnapshotTransactions platformSnapshotTransactions;
 
     @Autowired
     public PlatformSnapshotController(PlatformSnapshotRepository platformSnapshotRepository,
-                                      PlatformSnapshotScheduler platformSnapshotScheduler) {
+                                      PlatformSnapshotScheduler platformSnapshotScheduler,
+                                      PlatformSnapshotTransactions platformSnapshotTransactions) {
         this.platformSnapshotRepository = platformSnapshotRepository;
         this.platformSnapshotScheduler = platformSnapshotScheduler;
+        this.platformSnapshotTransactions = platformSnapshotTransactions;
     }
 
     @ApiOperation(
@@ -115,5 +119,14 @@ public class PlatformSnapshotController {
             .stream()
             .map(Enum::name)
             .collect(Collectors.toList()));
+    }
+
+    @ApiOperation(
+        value = "Delete platform snapshots older then",
+        notes = "Privilege level: Consumer of this endpoint must be an admin."
+    )
+    @RequestMapping(value = "/rest/v1/snapshots/delete", method = GET, produces = APPLICATION_JSON_VALUE)
+    public void deletePlatformSnapshot(@RequestParam("date") LocalDateTime date) {
+        platformSnapshotTransactions.deleteOlderThen(Date.from(date.toInstant(ZoneOffset.UTC)));
     }
 }

@@ -32,6 +32,7 @@ import org.trustedanalytics.platformsnapshot.model.CfServiceArtifact;
 import org.trustedanalytics.platformsnapshot.model.PlatformSnapshot;
 import org.trustedanalytics.platformsnapshot.model.PlatformSnapshotConfiguration;
 import org.trustedanalytics.platformsnapshot.persistence.PlatformSnapshotRepository;
+import org.trustedanalytics.platformsnapshot.persistence.PlatformSnapshotTransactions;
 import org.trustedanalytics.platformsnapshot.service.PlatformSnapshotScheduler;
 
 import java.time.LocalDateTime;
@@ -50,11 +51,13 @@ public class PlatformSnapshotControllerTest {
     PlatformSnapshotRepository platformSnapshotRepository;
     @Mock
     PlatformSnapshotScheduler platformSnapshotScheduler;
+    @Mock
+    PlatformSnapshotTransactions platformSnapshotTransactions;
     PlatformSnapshotController platformSnapshotController;
 
     @Before
     public void setUp() {
-        platformSnapshotController = new PlatformSnapshotController(platformSnapshotRepository, platformSnapshotScheduler);
+        platformSnapshotController = new PlatformSnapshotController(platformSnapshotRepository, platformSnapshotScheduler, platformSnapshotTransactions);
     }
 
     @Test
