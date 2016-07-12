@@ -15,9 +15,13 @@
  */
 package org.trustedanalytics.platformsnapshot.client;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class PlatformContext {
 
     private String apiEndpoint;

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2015 Intel Corporation
+ * Copyright (c) 2016 Intel Corporation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,23 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.trustedanalytics.platformsnapshot.client.cdh.entity;
+package org.trustedanalytics.platformsnapshot.model;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class CdhCluster {
+public class PlatformVersion {
 
-    private String entityStatus;
-    private String name;
-    private String displayName;
-    private String version;
-    private String fullVersion;
-    private Boolean maintenanceMode;
-    private String clusterUrl;
-    private String hostsUrl;
+    private final String cf;
+    private final String cdh;
+    private final String tap;
+
 }

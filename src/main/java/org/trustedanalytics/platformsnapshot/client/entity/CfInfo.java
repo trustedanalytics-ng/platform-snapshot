@@ -15,9 +15,13 @@
  */
 package org.trustedanalytics.platformsnapshot.client.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class CfInfo {
     private String name;
     private String build;

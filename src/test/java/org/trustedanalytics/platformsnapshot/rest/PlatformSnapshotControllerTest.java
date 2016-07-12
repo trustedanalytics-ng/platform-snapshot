@@ -18,7 +18,11 @@ package org.trustedanalytics.platformsnapshot.rest;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+
+import org.trustedanalytics.platformsnapshot.model.PlatformSnapshotConfiguration;
+import org.trustedanalytics.platformsnapshot.persistence.PlatformSnapshotRepository;
+import org.trustedanalytics.platformsnapshot.persistence.PlatformSnapshotTransactions;
+import org.trustedanalytics.platformsnapshot.service.PlatformSnapshotScheduler;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -26,23 +30,13 @@ import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.trustedanalytics.platformsnapshot.model.CdhServiceArtifact;
-import org.trustedanalytics.platformsnapshot.model.CfApplicationArtifact;
-import org.trustedanalytics.platformsnapshot.model.CfServiceArtifact;
-import org.trustedanalytics.platformsnapshot.model.PlatformSnapshot;
-import org.trustedanalytics.platformsnapshot.model.PlatformSnapshotConfiguration;
-import org.trustedanalytics.platformsnapshot.persistence.PlatformSnapshotRepository;
-import org.trustedanalytics.platformsnapshot.persistence.PlatformSnapshotTransactions;
-import org.trustedanalytics.platformsnapshot.service.PlatformSnapshotScheduler;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Optional;
-import java.util.UUID;
 import java.util.Date;
+import java.util.Optional;
 
 @RunWith(MockitoJUnitRunner.class)
 public class PlatformSnapshotControllerTest {
@@ -92,25 +86,6 @@ public class PlatformSnapshotControllerTest {
     }
 
     @Test
-    public void testGetPlatformSnapshotSummary() {
-
-        PlatformSnapshot sourcePlatformSnapshot = getPlatformSnapshot();
-        assertEquals(2, sourcePlatformSnapshot.getApplications().size());
-        assertEquals(1, sourcePlatformSnapshot.getCdhServices().size());
-        assertEquals(1, sourcePlatformSnapshot.getCfServices().size());
-
-        when(platformSnapshotRepository.findTopByOrderByCreatedAtDesc()).thenReturn(sourcePlatformSnapshot);
-        PlatformSnapshot actualPlatformSnapshot = platformSnapshotController.getPlatformSnapshotSummary();
-
-        assertEquals(0, actualPlatformSnapshot.getApplications().size());
-        assertEquals(0, actualPlatformSnapshot.getCdhServices().size());
-        assertEquals(0, actualPlatformSnapshot.getCfServices().size());
-        assertEquals("cfVersion", actualPlatformSnapshot.getCfVersion());
-        assertEquals("cdhVersion", actualPlatformSnapshot.getCdhVersion());
-        assertEquals("platformVersion", actualPlatformSnapshot.getPlatformVersion());
-    }
-
-    @Test
     public void testGetPlatformSnapshotById() {
         platformSnapshotController.getPlatformSnapshot(1L);
         verify(platformSnapshotRepository).findOne(1L);
@@ -127,35 +102,6 @@ public class PlatformSnapshotControllerTest {
         PlatformSnapshotConfiguration actualConfiguration = platformSnapshotController.getPlatformConfiguration();
         PlatformSnapshotConfiguration expectedConfiguration = getPlatformSnapshotConfiguration();
         assertEquals(expectedConfiguration, actualConfiguration);
-    }
-
-    private PlatformSnapshot getPlatformSnapshot() {
-        PlatformSnapshot platformSnapshot = new PlatformSnapshot();
-        Collection<CfApplicationArtifact> cfApplicationArtifacts = new ArrayList<>();
-
-        CfApplicationArtifact cfApplicationArtifact1 = new CfApplicationArtifact();
-        cfApplicationArtifact1.setGuid(UUID.randomUUID().toString());
-        CfApplicationArtifact cfApplicationArtifact2 = new CfApplicationArtifact();
-        cfApplicationArtifact2.setGuid(UUID.randomUUID().toString());
-
-        cfApplicationArtifacts.add(cfApplicationArtifact1);
-        cfApplicationArtifacts.add(cfApplicationArtifact2);
-
-        Collection<CfServiceArtifact> cfServices = new ArrayList<>();
-        CfServiceArtifact cfService = new CfServiceArtifact();
-        cfServices.add(cfService);
-
-        Collection<CdhServiceArtifact> cdhServiceArtifacts = new ArrayList<>();
-        CdhServiceArtifact cdhServiceArtifact = new CdhServiceArtifact();
-        cdhServiceArtifacts.add(cdhServiceArtifact);
-
-        platformSnapshot.setApplications(cfApplicationArtifacts);
-        platformSnapshot.setCfServices(cfServices);
-        platformSnapshot.setCdhServices(cdhServiceArtifacts);
-        platformSnapshot.setCdhVersion("cdhVersion");
-        platformSnapshot.setCfVersion("cfVersion");
-        platformSnapshot.setPlatformVersion("platformVersion");
-        return platformSnapshot;
     }
 
     private PlatformSnapshotConfiguration getPlatformSnapshotConfiguration() {
