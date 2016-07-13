@@ -32,6 +32,7 @@ import javax.persistence.Table;
 import java.io.Serializable;
 import java.time.ZoneOffset;
 import java.util.Date;
+import java.util.Objects;
 import java.util.Optional;
 
 @Data
@@ -68,5 +69,22 @@ public class CfServiceArtifact implements Serializable {
             this.updatedAt = Optional.ofNullable(cfService.getMetadata().getUpdatedAt()).map(date -> Date.from(date.toInstant(ZoneOffset.UTC))).orElse(null);
             this.createdAt = Date.from(cfService.getMetadata().getCreatedAt().toInstant(ZoneOffset.UTC));
             this.guid = cfService.getMetadata().getGuid().toString();
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if(other == this) {
+            return true;
+        } else if(other == null) {
+            return false;
+        } else if(!other.getClass().equals(CfServiceArtifact.class)) {
+            return false;
+        }
+        return Objects.equals(guid,((CfServiceArtifact) other).getGuid());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(guid);
     }
 }

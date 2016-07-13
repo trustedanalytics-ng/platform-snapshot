@@ -1,0 +1,340 @@
+{
+  "created_at_before": 1468349862034,
+  "created_at_after": 1468349862034,
+  "components": [{
+	"artifact": "workflow-scheduler",
+	"operation": "ADDED",
+	"metric": "createdAt",
+	"before": null,
+	"after": 1468210189000
+  },
+	{
+	  "artifact": "workflow-scheduler",
+	  "operation": "ADDED",
+	  "metric": "detectedBuildpack",
+	  "before": null,
+	  "after": "java-buildpack=v3.4-offline-https://github.com/cloudfoundry/java-buildpack.git#5cb22f2 java-main open-jdk-like-jre=1.8.0_65 open-jdk-like-memory-calculator=2.0.1_RELEASE spring-auto-reconfiguration=1.10.0_RELEASE"
+	},
+	{
+	  "artifact": "workflow-scheduler",
+	  "operation": "ADDED",
+	  "metric": "detectedStartCommand",
+	  "before": null,
+	  "after": "CALCULATED_MEMORY=$($PWD/.java-buildpack/open_jdk_jre/bin/java-buildpack-memory-calculator-2.0.1_RELEASE -memorySizes=metaspace:64m.. -memoryWeights=heap:75,metaspace:10,native:10,stack:5 -memoryInitials=heap:100%,metaspace:100% -totMemory=$MEMORY_LIMIT) && JAVA_OPTS=\"-Djava.io.tmpdir=$TMPDIR -XX:OnOutOfMemoryError=$PWD/.java-buildpack/open_jdk_jre/bin/killjava.sh $CALCULATED_MEMORY\" && SERVER_PORT=$PORT eval exec $PWD/.java-buildpack/open_jdk_jre/bin/java $JAVA_OPTS -cp $PWD/.:$PWD/.java-buildpack/spring_auto_reconfiguration/spring_auto_reconfiguration-1.10.0_RELEASE.jar org.springframework.boot.loader.JarLauncher"
+	},
+	{
+	  "artifact": "workflow-scheduler",
+	  "operation": "ADDED",
+	  "metric": "diskQuota",
+	  "before": null,
+	  "after": 1024
+	},
+	{
+	  "artifact": "workflow-scheduler",
+	  "operation": "ADDED",
+	  "metric": "guid",
+	  "before": null,
+	  "after": "2a20666e-760b-4881-a987-798c913a8df6"
+	},
+	{
+	  "artifact": "workflow-scheduler",
+	  "operation": "ADDED",
+	  "metric": "healthCheckTimeout",
+	  "before": null,
+	  "after": 180
+	},
+	{
+	  "artifact": "workflow-scheduler",
+	  "operation": "ADDED",
+	  "metric": "healthCheckType",
+	  "before": null,
+	  "after": "port"
+	},
+	{
+	  "artifact": "workflow-scheduler",
+	  "operation": "ADDED",
+	  "metric": "instances",
+	  "before": null,
+	  "after": 1
+	},
+	{
+	  "artifact": "workflow-scheduler",
+	  "operation": "ADDED",
+	  "metric": "memory",
+	  "before": null,
+	  "after": 1024
+	},
+	{
+	  "artifact": "workflow-scheduler",
+	  "operation": "ADDED",
+	  "metric": "name",
+	  "before": null,
+	  "after": "workflow-scheduler"
+	},
+	{
+	  "artifact": "workflow-scheduler",
+	  "operation": "ADDED",
+	  "metric": "organization",
+	  "before": null,
+	  "after": "661ced11-71a6-493a-94c6-dc375d551b84"
+	},
+	{
+	  "artifact": "workflow-scheduler",
+	  "operation": "ADDED",
+	  "metric": "scope",
+	  "before": null,
+	  "after": "CORE"
+	},
+	{
+	  "artifact": "workflow-scheduler",
+	  "operation": "ADDED",
+	  "metric": "space",
+	  "before": null,
+	  "after": "d71cc2b3-b940-4454-b7c0-68b148466133"
+	},
+	{
+	  "artifact": "workflow-scheduler",
+	  "operation": "ADDED",
+	  "metric": "state",
+	  "before": null,
+	  "after": "STARTED"
+	},
+	{
+	  "artifact": "workflow-scheduler",
+	  "operation": "ADDED",
+	  "metric": "updatedAt",
+	  "before": null,
+	  "after": 1468210252000
+	},
+	{
+	  "artifact": "workflow-scheduler",
+	  "operation": "ADDED",
+	  "metric": "version",
+	  "before": null,
+	  "after": "0.5.8"
+	},
+	{
+	  "artifact": "h2o-model-catalog",
+	  "operation": "REMOVED",
+	  "metric": "createdAt",
+	  "before": 1468208905000,
+	  "after": null
+	},
+	{
+	  "artifact": "h2o-model-catalog",
+	  "operation": "REMOVED",
+	  "metric": "detectedBuildpack",
+	  "before": "java-buildpack=v3.4-offline-https://github.com/cloudfoundry/java-buildpack.git#5cb22f2 java-main open-jdk-like-jre=1.8.0_65 open-jdk-like-memory-calculator=2.0.1_RELEASE spring-auto-reconfiguration=1.10.0_RELEASE",
+	  "after": null
+	},
+	{
+	  "artifact": "h2o-model-catalog",
+	  "operation": "REMOVED",
+	  "metric": "detectedStartCommand",
+	  "before": "CALCULATED_MEMORY=$($PWD/.java-buildpack/open_jdk_jre/bin/java-buildpack-memory-calculator-2.0.1_RELEASE -memorySizes=metaspace:64m.. -memoryWeights=heap:75,metaspace:10,native:10,stack:5 -memoryInitials=heap:100%,metaspace:100% -totMemory=$MEMORY_LIMIT) && JAVA_OPTS=\"-Djava.io.tmpdir=$TMPDIR -XX:OnOutOfMemoryError=$PWD/.java-buildpack/open_jdk_jre/bin/killjava.sh $CALCULATED_MEMORY\" && SERVER_PORT=$PORT eval exec $PWD/.java-buildpack/open_jdk_jre/bin/java $JAVA_OPTS -cp $PWD/.:$PWD/.java-buildpack/spring_auto_reconfiguration/spring_auto_reconfiguration-1.10.0_RELEASE.jar org.springframework.boot.loader.JarLauncher",
+	  "after": null
+	},
+	{
+	  "artifact": "h2o-model-catalog",
+	  "operation": "REMOVED",
+	  "metric": "diskQuota",
+	  "before": 1024,
+	  "after": null
+	},
+	{
+	  "artifact": "h2o-model-catalog",
+	  "operation": "REMOVED",
+	  "metric": "guid",
+	  "before": "34287bd2-1e47-4768-a4c2-04f50de536a3",
+	  "after": null
+	},
+	{
+	  "artifact": "h2o-model-catalog",
+	  "operation": "REMOVED",
+	  "metric": "healthCheckTimeout",
+	  "before": 180,
+	  "after": null
+	},
+	{
+	  "artifact": "h2o-model-catalog",
+	  "operation": "REMOVED",
+	  "metric": "healthCheckType",
+	  "before": "port",
+	  "after": null
+	},
+	{
+	  "artifact": "h2o-model-catalog",
+	  "operation": "REMOVED",
+	  "metric": "instances",
+	  "before": 1,
+	  "after": null
+	},
+	{
+	  "artifact": "h2o-model-catalog",
+	  "operation": "REMOVED",
+	  "metric": "memory",
+	  "before": 512,
+	  "after": null
+	},
+	{
+	  "artifact": "h2o-model-catalog",
+	  "operation": "REMOVED",
+	  "metric": "name",
+	  "before": "h2o-model-catalog",
+	  "after": null
+	},
+	{
+	  "artifact": "h2o-model-catalog",
+	  "operation": "REMOVED",
+	  "metric": "organization",
+	  "before": "661ced11-71a6-493a-94c6-dc375d551b84",
+	  "after": null
+	},
+	{
+	  "artifact": "h2o-model-catalog",
+	  "operation": "REMOVED",
+	  "metric": "scope",
+	  "before": "CORE",
+	  "after": null
+	},
+	{
+	  "artifact": "h2o-model-catalog",
+	  "operation": "REMOVED",
+	  "metric": "space",
+	  "before": "d71cc2b3-b940-4454-b7c0-68b148466133",
+	  "after": null
+	},
+	{
+	  "artifact": "h2o-model-catalog",
+	  "operation": "REMOVED",
+	  "metric": "state",
+	  "before": "STARTED",
+	  "after": null
+	},
+	{
+	  "artifact": "h2o-model-catalog",
+	  "operation": "REMOVED",
+	  "metric": "updatedAt",
+	  "before": 1468208938000,
+	  "after": null
+	},
+	{
+	  "artifact": "h2o-model-catalog",
+	  "operation": "REMOVED",
+	  "metric": "version",
+	  "before": "0.1.0",
+	  "after": null
+	},
+	{
+	  "artifact": "hdfs-broker",
+	  "operation": "CHANGED",
+	  "metric": "memory",
+	  "before": 1024,
+	  "after": 512
+	},
+	{
+	  "artifact": "hdfs-broker",
+	  "operation": "CHANGED",
+	  "metric": "state",
+	  "before": "STOPPED",
+	  "after": "STARTED"
+	},
+	{
+	  "artifact": "HIVE",
+	  "operation": "ADDED",
+	  "metric": "entityStatus",
+	  "before": null,
+	  "after": "GOOD_HEALTH"
+	},
+	{
+	  "artifact": "HIVE",
+	  "operation": "ADDED",
+	  "metric": "healthSummary",
+	  "before": null,
+	  "after": "GOOD"
+	},
+	{
+	  "artifact": "HIVE",
+	  "operation": "ADDED",
+	  "metric": "name",
+	  "before": null,
+	  "after": "HIVE"
+	},
+	{
+	  "artifact": "HIVE",
+	  "operation": "ADDED",
+	  "metric": "serviceState",
+	  "before": null,
+	  "after": "STARTED"
+	},
+	{
+	  "artifact": "HIVE",
+	  "operation": "ADDED",
+	  "metric": "type",
+	  "before": null,
+	  "after": "HIVE"
+	},
+	{
+	  "artifact": "gateway",
+	  "operation": "ADDED",
+	  "metric": "createdAt",
+	  "before": null,
+	  "after": 1468209066000
+	},
+	{
+	  "artifact": "gateway",
+	  "operation": "ADDED",
+	  "metric": "description",
+	  "before": null,
+	  "after": "Provides proxy functionality"
+	},
+	{
+	  "artifact": "gateway",
+	  "operation": "ADDED",
+	  "metric": "guid",
+	  "before": null,
+	  "after": "e2ad3d5e-ea8f-41ef-8c91-ed54ce98b40b"
+	},
+	{
+	  "artifact": "gateway",
+	  "operation": "ADDED",
+	  "metric": "label",
+	  "before": null,
+	  "after": "gateway"
+	},
+	{
+	  "artifact": "gateway",
+	  "operation": "ADDED",
+	  "metric": "updatedAt",
+	  "before": null,
+	  "after": 1468195395000
+	},
+	{
+	  "artifact": "gearpump",
+	  "operation": "ADDED",
+	  "metric": "createdAt",
+	  "before": null,
+	  "after": 1468211023000
+	},
+	{
+	  "artifact": "gearpump",
+	  "operation": "ADDED",
+	  "metric": "description",
+	  "before": null,
+	  "after": "Modern big data real-time streaming engine"
+	},
+	{
+	  "artifact": "gearpump",
+	  "operation": "ADDED",
+	  "metric": "guid",
+	  "before": null,
+	  "after": "d1a008eb-3f16-4bed-a1ae-ce22cf1b354c"
+	},
+	{
+	  "artifact": "gearpump",
+	  "operation": "ADDED",
+	  "metric": "label",
+	  "before": null,
+	  "after": "gearpump"
+	}]
+}

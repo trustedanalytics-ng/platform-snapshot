@@ -29,6 +29,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.io.Serializable;
+import java.util.Objects;
 
 @Data
 @Table(name = "CDH_SERVICE_ARTIFACT")
@@ -63,4 +64,20 @@ public class CdhServiceArtifact implements Serializable {
         this.healthSummary = cdhService.getHealthSummary();
         this.entityStatus = cdhService.getEntityStatus();
     }
+
+    @Override
+    public boolean equals(Object other) {
+        if(other == this) {
+            return true;
+        } else if(other == null) {
+            return false;
+        } else if(!other.getClass().equals(CdhServiceArtifact.class)) {
+            return false;
+        }
+
+        return Objects.equals(name, ((CdhServiceArtifact) other).name);
+    }
+
+    @Override
+    public int hashCode() { return Objects.hashCode(name); }
 }

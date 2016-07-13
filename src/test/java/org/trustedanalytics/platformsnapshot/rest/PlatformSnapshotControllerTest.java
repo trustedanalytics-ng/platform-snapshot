@@ -15,21 +15,17 @@
  */
 package org.trustedanalytics.platformsnapshot.rest;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.verify;
-
-import org.trustedanalytics.platformsnapshot.model.PlatformSnapshotConfiguration;
-import org.trustedanalytics.platformsnapshot.persistence.PlatformSnapshotRepository;
-import org.trustedanalytics.platformsnapshot.persistence.PlatformSnapshotTransactions;
-import org.trustedanalytics.platformsnapshot.service.PlatformSnapshotScheduler;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.trustedanalytics.platformsnapshot.model.PlatformSnapshotConfiguration;
+import org.trustedanalytics.platformsnapshot.persistence.PlatformSnapshotRepository;
+import org.trustedanalytics.platformsnapshot.persistence.PlatformSnapshotTransactions;
+import org.trustedanalytics.platformsnapshot.service.PlatformSnapshotDiffService;
+import org.trustedanalytics.platformsnapshot.service.PlatformSnapshotScheduler;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -37,6 +33,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Optional;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
 public class PlatformSnapshotControllerTest {
@@ -48,10 +48,13 @@ public class PlatformSnapshotControllerTest {
     @Mock
     PlatformSnapshotTransactions platformSnapshotTransactions;
     PlatformSnapshotController platformSnapshotController;
+    @Mock
+    PlatformSnapshotDiffService platformSnapshotDiffService;
 
     @Before
     public void setUp() {
-        platformSnapshotController = new PlatformSnapshotController(platformSnapshotRepository, platformSnapshotScheduler, platformSnapshotTransactions);
+        platformSnapshotController = new PlatformSnapshotController(platformSnapshotRepository, platformSnapshotScheduler,
+                platformSnapshotTransactions, platformSnapshotDiffService);
     }
 
     @Test
@@ -95,6 +98,18 @@ public class PlatformSnapshotControllerTest {
     public void testTriggerPlatformSnapshot() {
         platformSnapshotController.triggerPlatformSnapshot();
         verify(platformSnapshotScheduler).trigger();
+    }
+
+    @Test
+    public void testComparePlatformSnapshots() throws Exception {
+        platformSnapshotController.compareSnapshots(Optional.of(1L), Optional.of(2L), Optional.<String>empty());
+        verify(platformSnapshotDiffService).diff(Optional.of(1L), Optional.of(2L));
+    }
+
+    @Test
+    public void testAggregatePlatformSnapshots() throws Exception {
+        platformSnapshotController.compareSnapshots(Optional.of(1L), Optional.of(2L), Optional.of("type"));
+        verify(platformSnapshotDiffService).diffByType(Optional.of(1L), Optional.of(2L));
     }
 
     @Test

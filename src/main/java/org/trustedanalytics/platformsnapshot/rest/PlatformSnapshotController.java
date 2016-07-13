@@ -18,11 +18,13 @@ package org.trustedanalytics.platformsnapshot.rest;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
-import org.trustedanalytics.platformsnapshot.model.PlatformSnapshot;
 import org.trustedanalytics.platformsnapshot.model.PlatformSnapshotConfiguration;
+import org.trustedanalytics.platformsnapshot.model.PlatformSnapshot;
+import org.trustedanalytics.platformsnapshot.model.PlatformSnapshotDiff;
 import org.trustedanalytics.platformsnapshot.model.Scope;
 import org.trustedanalytics.platformsnapshot.persistence.PlatformSnapshotRepository;
 import org.trustedanalytics.platformsnapshot.persistence.PlatformSnapshotTransactions;
+import org.trustedanalytics.platformsnapshot.service.PlatformSnapshotDiffService;
 import org.trustedanalytics.platformsnapshot.service.PlatformSnapshotScheduler;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,14 +48,17 @@ public class PlatformSnapshotController {
     private final PlatformSnapshotRepository platformSnapshotRepository;
     private final PlatformSnapshotScheduler platformSnapshotScheduler;
     private final PlatformSnapshotTransactions platformSnapshotTransactions;
+    private final PlatformSnapshotDiffService platformSnapshotDiffService;
 
     @Autowired
     public PlatformSnapshotController(PlatformSnapshotRepository platformSnapshotRepository,
                                       PlatformSnapshotScheduler platformSnapshotScheduler,
-                                      PlatformSnapshotTransactions platformSnapshotTransactions) {
+                                      PlatformSnapshotTransactions platformSnapshotTransactions,
+                                      PlatformSnapshotDiffService platformSnapshotDiffService) {
         this.platformSnapshotRepository = platformSnapshotRepository;
         this.platformSnapshotScheduler = platformSnapshotScheduler;
         this.platformSnapshotTransactions = platformSnapshotTransactions;
+        this.platformSnapshotDiffService = platformSnapshotDiffService;
     }
 
     @ApiOperation(
@@ -114,4 +119,20 @@ public class PlatformSnapshotController {
     public void deletePlatformSnapshot(@RequestParam("date") LocalDateTime date) {
         platformSnapshotTransactions.deleteOlderThen(Date.from(date.toInstant(ZoneOffset.UTC)));
     }
+
+    @ApiOperation(
+            value = "Perform difference between snapshots to identify what has changed.",
+            notes = "Privilege level: Consumer of this endpoint must be an admin."
+    )
+    @RequestMapping(value = "/rest/v1/snapshots/{idBefore}/diff/{idAfter}", method = GET, produces = APPLICATION_JSON_VALUE)
+    public PlatformSnapshotDiff compareSnapshots(
+            @PathVariable("idBefore") Optional<Long> idBefore,
+            @PathVariable("idAfter") Optional<Long> idAfter,
+            @RequestParam(value = "aggregateBy") Optional<String> aggregateBy) {
+
+        return aggregateBy.filter("type"::equalsIgnoreCase).map(type ->
+                platformSnapshotDiffService.diffByType(idBefore, idAfter))
+                .orElse(platformSnapshotDiffService.diff(idBefore, idAfter));
+    }
+
 }

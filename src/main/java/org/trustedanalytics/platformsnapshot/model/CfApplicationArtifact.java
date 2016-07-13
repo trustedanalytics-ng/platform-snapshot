@@ -24,6 +24,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.time.ZoneOffset;
 import java.util.Date;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -113,5 +114,22 @@ public class CfApplicationArtifact implements  Serializable {
         this.setDetectedStartCommand(entity.getDetectedStartCommand());
         this.setHealthCheckType(entity.getHealthCheckType());
         this.setHealthCheckTimeout(entity.getHealthCheckTimeout());
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if(other == this) {
+            return true;
+        } else if(other == null) {
+            return false;
+        } else if(!other.getClass().equals(CfApplicationArtifact.class)) {
+            return false;
+        }
+        return Objects.equals(guid, ((CfApplicationArtifact) other).guid);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(guid);
     }
 }

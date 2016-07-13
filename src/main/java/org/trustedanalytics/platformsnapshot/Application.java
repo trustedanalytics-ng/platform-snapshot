@@ -39,9 +39,6 @@ public class Application extends JpaBaseConfiguration {
 
     @Override
     protected Map<String, Object> getVendorProperties() {
-        Map<String,Object> properties = new HashMap<>();
-        properties.put("openjpa.DynamicEnhancementAgent","false");
-        properties.put("openjpa.RuntimeUnenhancedClasses","supported");
         return new HashMap<>();
     }
 }

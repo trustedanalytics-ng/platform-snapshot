@@ -30,6 +30,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.google.common.base.MoreObjects;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -103,5 +104,19 @@ public class PlatformSnapshot implements Serializable {
             .cdhServices(cdhServices)
             .cfServices(cfServices)
             .build();
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this)
+                .add("id", id)
+                .add("platformVersion", platformVersion)
+                .add("createdAt", createdAt)
+                .add("cdhVersion", cdhVersion)
+                .add("cfVersion", cfVersion)
+                .add("applications", applications)
+                .add("cdhServices", cdhServices)
+                .add("cfServices", cfServices)
+                .toString();
     }
 }
