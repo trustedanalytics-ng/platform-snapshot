@@ -28,7 +28,7 @@ public class CcRxPageResolver implements BiFunction<URI, CfOperations, Observabl
     public Observable<?> apply(URI uri, CfOperations cfOperations) {
         final String path = uri.toString();
 
-        if(path.startsWith("/v2/spaces") && path.endsWith("/apps")) {
+        if(path.startsWith("/v2/spaces") && path.contains("apps")) {
             return cfOperations.getApplications(uri);
         }
         if(path.startsWith("/v2/spaces")) {
