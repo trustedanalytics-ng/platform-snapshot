@@ -15,34 +15,29 @@
  */
 package org.trustedanalytics.platformsnapshot;
 
-import org.trustedanalytics.platformsnapshot.client.CfOperations;
-import org.trustedanalytics.platformsnapshot.client.CfRxClient;
-import org.trustedanalytics.platformsnapshot.client.LocalDateTimeDeserializer;
-import org.trustedanalytics.platformsnapshot.client.PlatformContextOperations;
-import org.trustedanalytics.platformsnapshot.security.OAuth2TokenSupplier;
-
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
-
 import feign.Feign;
 import feign.Logger;
 import feign.Request;
 import feign.jackson.JacksonDecoder;
 import feign.jackson.JacksonEncoder;
 import feign.slf4j.Slf4jLogger;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.oauth2.client.DefaultOAuth2ClientContext;
-import org.springframework.security.oauth2.client.OAuth2ClientContext;
-import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.security.oauth2.client.resource.OAuth2ProtectedResourceDetails;
-import org.springframework.security.oauth2.client.token.DefaultAccessTokenRequest;
-import org.springframework.security.oauth2.client.token.grant.client.ClientCredentialsAccessTokenProvider;
 import org.springframework.security.oauth2.client.token.grant.client.ClientCredentialsResourceDetails;
+import org.trustedanalytics.platformsnapshot.client.CfOperations;
+import org.trustedanalytics.platformsnapshot.client.CfRxClient;
+import org.trustedanalytics.platformsnapshot.client.LocalDateTimeDeserializer;
+import org.trustedanalytics.platformsnapshot.client.PlatformContextOperations;
+import org.trustedanalytics.platformsnapshot.client.uaa.CachedUaaOperations;
+import org.trustedanalytics.platformsnapshot.client.uaa.OAuth2PrivilegedInterceptor;
+import org.trustedanalytics.platformsnapshot.client.uaa.UaaOperations;
+import org.trustedanalytics.platformsnapshot.security.OAuth2TokenSupplier;
 
 @Configuration
 public class ApplicationConfiguration {
@@ -59,22 +54,10 @@ public class ApplicationConfiguration {
     }
 
     @Bean
-    public OAuth2ClientContext oauth2ClientContext() {
-        return new DefaultOAuth2ClientContext(new DefaultAccessTokenRequest());
-    }
-
-    @Bean
     @ConfigurationProperties("spring.oauth2.client")
     public OAuth2ProtectedResourceDetails clientCredentials() {
-        return new ClientCredentialsResourceDetails();
-    }
 
-    @Bean
-    public OAuth2RestTemplate clientRestTemplate() {
-        OAuth2RestTemplate template = new OAuth2RestTemplate(clientCredentials());
-        ClientCredentialsAccessTokenProvider provider = new ClientCredentialsAccessTokenProvider();
-        template.setAccessTokenProvider(provider);
-        return template;
+        return new ClientCredentialsResourceDetails();
     }
 
     @Bean
@@ -83,14 +66,13 @@ public class ApplicationConfiguration {
     }
 
     @Bean
-    public PlatformContextOperations platformContextOperations() {
-        final String token = clientRestTemplate().getAccessToken().toString();
+    public PlatformContextOperations platformContextOperations(OAuth2PrivilegedInterceptor oAuth2PrivilegedInterceptor) {
         return Feign.builder()
                     .encoder(new JacksonEncoder(objectMapper()))
                     .decoder(new JacksonDecoder(objectMapper()))
                     .logger(new Slf4jLogger(PlatformContextOperations.class))
                     .options(new Request.Options(30_1000, 10_1000))
-                    .requestInterceptor(template -> template.header("Authorization", "bearer " + token))
+                    .requestInterceptor(oAuth2PrivilegedInterceptor)
                     .logLevel(Logger.Level.BASIC)
                     .target(PlatformContextOperations.class, platformContextUrl);
     }
@@ -103,12 +85,20 @@ public class ApplicationConfiguration {
     }
 
     @Bean
-    public CfOperations cfRxClient() {
-        final String token = clientRestTemplate().getAccessToken().toString();
+    public CfOperations cfRxClient(OAuth2PrivilegedInterceptor oauth2PrivilegedInterceptor) {
         return new CfRxClient(builder -> builder
-            .requestInterceptor(template -> template.header("Authorization", "bearer " + token))
+            .requestInterceptor(oauth2PrivilegedInterceptor)
             .logLevel(Logger.Level.BASIC), cfApiUrl);
     }
 
+    @Bean
+    protected OAuth2PrivilegedInterceptor oauth2PrivilegedInterceptor(UaaOperations uaaOperations) {
+        return new OAuth2PrivilegedInterceptor(uaaOperations);
+    }
+
+    @Bean
+    public UaaOperations uaaOperations(@Value("${uaaUri}") String uaaUri, OAuth2ProtectedResourceDetails clientCredentials) {
+        return new CachedUaaOperations( uaaUri, clientCredentials.getClientId(), clientCredentials.getClientSecret());
+    }
 
 }

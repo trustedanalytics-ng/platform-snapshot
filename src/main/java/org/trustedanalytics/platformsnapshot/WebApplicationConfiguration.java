@@ -28,6 +28,7 @@ public class WebApplicationConfiguration extends WebMvcConfigurerAdapter {
     @Autowired
     OAuth2TokenSupplier tokenSupplier;
 
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new AdminInterceptor(tokenSupplier)).addPathPatterns("/rest/v1/snapshots/**");

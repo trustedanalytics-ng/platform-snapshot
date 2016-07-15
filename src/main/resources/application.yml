@@ -20,7 +20,7 @@ spring.oauth2:
     userInfoUri: ${vcap.services.sso.credentials.userInfoUri}
     api: ${vcap.services.sso.credentials.apiEndpoint}
   check_token: ${vcap.services.sso.credentials.checkTokenUri}
-
+uaaUri: ${vcap.services.sso.credentials.uaaUri}
 services:
   platform-context: ${vcap.services.platformcontext.credentials.host}
 
