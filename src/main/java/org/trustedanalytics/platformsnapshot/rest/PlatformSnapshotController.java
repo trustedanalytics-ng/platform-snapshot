@@ -96,7 +96,7 @@ public class PlatformSnapshotController {
 
     @ApiOperation(
         value = "Get platform snapshot configuration",
-        notes = "Privilege level: Consumer of this endpoint must be an admin."
+        notes = "Privilege level: Consumer of this endpoint must be an user."
     )
     @RequestMapping(value = "/rest/v1/configuration", method = GET, produces = APPLICATION_JSON_VALUE)
     public PlatformSnapshotConfiguration getPlatformConfiguration() {

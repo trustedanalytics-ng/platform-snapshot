@@ -24,6 +24,7 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -46,14 +47,17 @@ public class AdminInterceptor extends HandlerInterceptorAdapter {
 
     private boolean checkAdmin() throws InvalidJwtException {
         final JwtConsumer jwtConsumer = new JwtConsumerBuilder()
-            .setSkipAllValidators()
-            .setDisableRequireSignature()
-            .setSkipSignatureVerification()
-            .build();
+                .setSkipAllValidators()
+                .setDisableRequireSignature()
+                .setSkipSignatureVerification()
+                .build();
 
         final JwtContext context = jwtConsumer.process(tokenSupplier.get());
-        final JwtClaims claims = context.getJwtClaims();
-        final List<String> extractedScopes = (List<String>) claims.getClaimsMap().get("scope");
-        return extractedScopes.contains(ADMIN_SCOPE);
+
+        return Optional.ofNullable(context.getJwtClaims())
+                .map(claim -> claim.getClaimsMap())
+                .map(claimsMap -> claimsMap.get("scope"))
+                .filter(scopes -> scopes.toString().contains(ADMIN_SCOPE))
+                .isPresent();
     }
 }
