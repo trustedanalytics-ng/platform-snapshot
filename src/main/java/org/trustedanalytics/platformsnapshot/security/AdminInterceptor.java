@@ -15,14 +15,12 @@
  */
 package org.trustedanalytics.platformsnapshot.security;
 
-import org.jose4j.jwt.JwtClaims;
 import org.jose4j.jwt.consumer.InvalidJwtException;
 import org.jose4j.jwt.consumer.JwtConsumer;
 import org.jose4j.jwt.consumer.JwtConsumerBuilder;
 import org.jose4j.jwt.consumer.JwtContext;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
