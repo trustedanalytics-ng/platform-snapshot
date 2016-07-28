@@ -102,14 +102,14 @@ public class PlatformSnapshotControllerTest {
 
     @Test
     public void testComparePlatformSnapshots() throws Exception {
-        platformSnapshotController.compareSnapshots(Optional.of(1L), Optional.of(2L), Optional.<String>empty());
-        verify(platformSnapshotDiffService).diff(Optional.of(1L), Optional.of(2L));
+        platformSnapshotController.compareSnapshots(1L, 2L, Optional.<String>empty());
+        verify(platformSnapshotDiffService).diff(1L, 2L);
     }
 
     @Test
     public void testAggregatePlatformSnapshots() throws Exception {
-        platformSnapshotController.compareSnapshots(Optional.of(1L), Optional.of(2L), Optional.of("type"));
-        verify(platformSnapshotDiffService).diffByType(Optional.of(1L), Optional.of(2L));
+        platformSnapshotController.compareSnapshots(1L, 2L, Optional.of("type"));
+        verify(platformSnapshotDiffService).diffByType(1L, 2L);
     }
 
     @Test

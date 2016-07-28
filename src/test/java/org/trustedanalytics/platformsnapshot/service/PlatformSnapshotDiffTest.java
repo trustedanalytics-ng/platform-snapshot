@@ -18,20 +18,17 @@ package org.trustedanalytics.platformsnapshot.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.trustedanalytics.platformsnapshot.model.FlattenPlatformSnapshotDiff;
 import org.trustedanalytics.platformsnapshot.model.PartitionedPlatformSnapshotDiff;
 import org.trustedanalytics.platformsnapshot.model.PlatformSnapshot;
-import org.trustedanalytics.platformsnapshot.model.FlatPlatformSnapshotDiff;
 import org.trustedanalytics.platformsnapshot.model.PlatformSnapshotDiff;
 import org.trustedanalytics.platformsnapshot.persistence.PlatformSnapshotRepository;
 
 import java.io.IOException;
-import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
@@ -57,11 +54,11 @@ public class PlatformSnapshotDiffTest {
         // given
         PlatformSnapshot before = readObjectFromFile(mapper, "snapshot_before.json", PlatformSnapshot.class);
         PlatformSnapshot after = readObjectFromFile(mapper, "snapshot_after.json", PlatformSnapshot.class);
-        PlatformSnapshotDiff expectedDiff = readObjectFromFile(mapper, "diff.json", FlatPlatformSnapshotDiff.class);
+        PlatformSnapshotDiff expectedDiff = readObjectFromFile(mapper, "diff.json", FlattenPlatformSnapshotDiff.class);
         mockRepository(after, before);
 
         // when
-        PlatformSnapshotDiff actualDiff = service.diff(Optional.of(before.getId()), Optional.of(after.getId()));
+        PlatformSnapshotDiff actualDiff = service.diff(before.getId(), after.getId());
 
         // then
         assertEquals(mapper.writeValueAsString(expectedDiff), mapper.writeValueAsString(actualDiff));
@@ -76,78 +73,11 @@ public class PlatformSnapshotDiffTest {
         mockRepository(after, before);
 
         // when
-        PlatformSnapshotDiff actualDiff = service.diffByType(Optional.of(before.getId()), Optional.of(after.getId()));
+        PlatformSnapshotDiff actualDiff = service.diffByType(before.getId(), after.getId());
 
         // then
         assertEquals(mapper.writeValueAsString(expectedDiff), mapper.writeValueAsString(actualDiff));
     }
-
-    @Test
-    public void testDiffWithGivenIdAfter() throws IOException {
-        PlatformSnapshot after = readObjectFromFile(mapper, "snapshot_after.json", PlatformSnapshot.class);
-        PlatformSnapshot before = readObjectFromFile(mapper, "snapshot_before.json", PlatformSnapshot.class);
-        mockRepository(after, before);
-
-        exception.expect(IllegalArgumentException.class);
-        exception.expectMessage("Before snapshot was not provided");
-        service.diff(Optional.empty(), Optional.of(after.getId()));
-    }
-
-    @Rule
-    public ExpectedException exception = ExpectedException.none();
-
-    @Test
-    public void testDiffWithGivenIdBefore() throws IOException {
-        //when
-        PlatformSnapshot after = readObjectFromFile(mapper, "snapshot_after.json", PlatformSnapshot.class);
-        PlatformSnapshot before = readObjectFromFile(mapper, "snapshot_before.json", PlatformSnapshot.class);
-        FlatPlatformSnapshotDiff expectedDiff = readObjectFromFile(mapper, "diff.json", FlatPlatformSnapshotDiff.class);
-        mockRepository(after, before);
-
-        //given
-        PlatformSnapshotDiff actualDiff = service.diff(Optional.of(before.getId()), Optional.empty());
-
-        //then
-        assertEquals(mapper.writeValueAsString(expectedDiff), mapper.writeValueAsString(actualDiff));
-    }
-
-    @Test
-    public void testDiffWithAnyGivenId() throws IOException {
-        PlatformSnapshot after = readObjectFromFile(mapper, "snapshot_after.json", PlatformSnapshot.class);
-        PlatformSnapshot before = readObjectFromFile(mapper, "snapshot_before.json", PlatformSnapshot.class);
-        mockRepository(after, before);
-
-        exception.expect(IllegalArgumentException.class);
-        exception.expectMessage("No snapshot was provided");
-        service.diff(Optional.empty(), Optional.empty());
-    }
-
-    @Test
-    public void testDiffWithNotExistingSnapshot() throws IOException {
-        // given
-        PlatformSnapshot after = readObjectFromFile(mapper, "snapshot_after.json", PlatformSnapshot.class);
-
-        // when
-        when(repository.findTopByOrderByCreatedAtDesc()).thenReturn(after);
-        when(repository.exists(1L)).thenReturn(false);
-        when(repository.exists(2L)).thenReturn(true);
-
-        //then
-        exception.expect(IllegalArgumentException.class);
-        exception.expectMessage("Snapshot with id 1 does not exist");
-        service.diff(Optional.of(1L), Optional.of(2L));
-    }
-
-    @Test
-    public void testDiffNotExistingSnapshots() throws IOException {
-        when(repository.findTopByOrderByCreatedAtDesc()).thenReturn(null);
-        when(repository.exists(1L)).thenReturn(false);
-        when(repository.exists(2L)).thenReturn(false);
-        exception.expect(IllegalArgumentException.class);
-        exception.expectMessage("Snapshot with id 1 does not exist");
-        service.diff(Optional.of(1L), Optional.of(2L));
-    }
-
 
     private void mockRepository(PlatformSnapshot after, PlatformSnapshot before) {
         when(repository.findTopByOrderByCreatedAtDesc()).thenReturn(after);

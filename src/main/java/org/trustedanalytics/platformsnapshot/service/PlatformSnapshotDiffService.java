@@ -24,7 +24,7 @@ import org.trustedanalytics.platformsnapshot.model.PlatformSnapshot;
 import org.trustedanalytics.platformsnapshot.model.PlatformSnapshotDiff;
 import org.trustedanalytics.platformsnapshot.persistence.PlatformSnapshotRepository;
 import org.trustedanalytics.platformsnapshot.service.diff.FlattenDiffProcessor;
-import org.trustedanalytics.platformsnapshot.service.diff.IDiffProcessor;
+import org.trustedanalytics.platformsnapshot.service.diff.DiffProcessor;
 import org.trustedanalytics.platformsnapshot.service.diff.PartitionedDiffProcessor;
 
 import java.util.Objects;
@@ -43,35 +43,24 @@ public class PlatformSnapshotDiffService {
         this.repository = Objects.requireNonNull(repository, "repository");
     }
 
-    public PlatformSnapshotDiff diff(Optional<Long> idBefore, Optional<Long> idAfter) {
+    public PlatformSnapshotDiff diff(long idBefore, long idAfter) {
         return process(idBefore, idAfter, new FlattenDiffProcessor());
     }
 
-    public PlatformSnapshotDiff diffByType(Optional<Long> idBefore, Optional<Long> idAfter) {
+    public PlatformSnapshotDiff diffByType(long idBefore, long idAfter) {
         return process(idBefore, idAfter, new PartitionedDiffProcessor());
     }
 
-    private PlatformSnapshotDiff process(Optional<Long> idBefore, Optional<Long> idAfter, IDiffProcessor processor) {
-        if (!idAfter.isPresent() && !idBefore.isPresent()) {
-            throw new IllegalArgumentException("No snapshot was provided");
-        }
-
-        final PlatformSnapshot before = idBefore.map(this::findSnapshot)
-                .orElseThrow(() -> new IllegalArgumentException("Before snapshot was not provided"));
-        final PlatformSnapshot after = idAfter.map(this::findSnapshot).orElse(getLatest());
-
+    private PlatformSnapshotDiff process(long idBefore, long idAfter, DiffProcessor processor) {
+        final PlatformSnapshot before = findSnapshot(idBefore);
+        final PlatformSnapshot after = findSnapshot(idAfter);
         final DiffNode root = ObjectDifferBuilder.buildDefault().compare(after, before);
+
         return processor.process(root, before, after);
     }
 
-    private PlatformSnapshot getLatest() {
-        PlatformSnapshot latest = repository.findTopByOrderByCreatedAtDesc();
-        checkNotNull(latest, "Cannot find any snapshot");
-        return repository.findTopByOrderByCreatedAtDesc();
-    }
-
-    private PlatformSnapshot findSnapshot(Long id) {
-        checkArgument(repository.exists(id), String.format("Snapshot with id %s does not exist", id));
-        return repository.findOne(id);
+    private PlatformSnapshot findSnapshot(long id) {
+        return Optional.ofNullable(repository.findOne(id))
+                .orElseThrow(() -> new IllegalArgumentException(String.format("Snapshot with id %s does not exist", id)));
     }
 }

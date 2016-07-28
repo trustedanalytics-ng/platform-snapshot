@@ -29,7 +29,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class PartitionedDiffProcessor extends DiffProcessor implements IDiffProcessor {
+public class PartitionedDiffProcessor extends AbstractDiffProcessor implements DiffProcessor {
     @Override
     public PlatformSnapshotDiff process(DiffNode root, PlatformSnapshot before, PlatformSnapshot after) {
         final Collection<PlatformSnapshotDiffEntry> diffs = processChanges(root, after, before);

@@ -29,7 +29,7 @@ import java.util.Date;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class FlatPlatformSnapshotDiff implements PlatformSnapshotDiff {
+public class FlattenPlatformSnapshotDiff implements PlatformSnapshotDiff {
     @JsonProperty
     private Date createdAtBefore;
     @JsonProperty

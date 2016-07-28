@@ -17,14 +17,14 @@ package org.trustedanalytics.platformsnapshot.service.diff;
 
 
 import de.danielbechler.diff.node.DiffNode;
-import org.trustedanalytics.platformsnapshot.model.FlatPlatformSnapshotDiff;
+import org.trustedanalytics.platformsnapshot.model.FlattenPlatformSnapshotDiff;
 import org.trustedanalytics.platformsnapshot.model.PlatformSnapshot;
 import org.trustedanalytics.platformsnapshot.model.PlatformSnapshotDiff;
 
-public class FlattenDiffProcessor extends DiffProcessor implements IDiffProcessor {
+public class FlattenDiffProcessor extends AbstractDiffProcessor implements DiffProcessor {
     @Override
     public PlatformSnapshotDiff process(DiffNode root, PlatformSnapshot before, PlatformSnapshot after) {
-        return FlatPlatformSnapshotDiff.builder()
+        return FlattenPlatformSnapshotDiff.builder()
                 .components(processChanges(root, after, before))
                 .createdAtAfter(after.getCreatedAt())
                 .createdAtBefore(before.getCreatedAt()).build();

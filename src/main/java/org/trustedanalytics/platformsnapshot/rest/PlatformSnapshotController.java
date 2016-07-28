@@ -126,8 +126,8 @@ public class PlatformSnapshotController {
     )
     @RequestMapping(value = "/rest/v1/snapshots/{idBefore}/diff/{idAfter}", method = GET, produces = APPLICATION_JSON_VALUE)
     public PlatformSnapshotDiff compareSnapshots(
-            @PathVariable("idBefore") Optional<Long> idBefore,
-            @PathVariable("idAfter") Optional<Long> idAfter,
+            @PathVariable("idBefore") long idBefore,
+            @PathVariable("idAfter") long idAfter,
             @RequestParam(value = "aggregateBy") Optional<String> aggregateBy) {
 
         return aggregateBy.filter("type"::equalsIgnoreCase).map(type ->
