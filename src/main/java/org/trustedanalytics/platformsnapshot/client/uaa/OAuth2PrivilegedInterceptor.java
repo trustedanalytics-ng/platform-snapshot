@@ -18,8 +18,6 @@ package org.trustedanalytics.platformsnapshot.client.uaa;
 
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
-import org.trustedanalytics.platformsnapshot.client.uaa.UaaOperations;
-
 
 public class OAuth2PrivilegedInterceptor implements RequestInterceptor {
 

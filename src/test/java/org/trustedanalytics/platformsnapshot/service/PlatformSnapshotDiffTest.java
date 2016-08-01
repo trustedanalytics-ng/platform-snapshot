@@ -18,7 +18,9 @@ package org.trustedanalytics.platformsnapshot.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -79,10 +81,21 @@ public class PlatformSnapshotDiffTest {
         assertEquals(mapper.writeValueAsString(expectedDiff), mapper.writeValueAsString(actualDiff));
     }
 
+    @Rule
+    public ExpectedException exception = ExpectedException.none();
+
+    @Test
+    public void testDiffWithNotExistingSnapshots() throws IOException {
+        PlatformSnapshot before = readObjectFromFile(mapper, "snapshot_before.json", PlatformSnapshot.class);
+        PlatformSnapshot after = readObjectFromFile(mapper, "snapshot_after.json", PlatformSnapshot.class);
+        when(repository.findOne(before.getId())).thenReturn(before);
+
+        exception.expect(IllegalArgumentException.class);
+        exception.expectMessage(String.format("Snapshot with id %s does not exist", after.getId()));
+        service.diff(before.getId(), after.getId());
+    }
+
     private void mockRepository(PlatformSnapshot after, PlatformSnapshot before) {
-        when(repository.findTopByOrderByCreatedAtDesc()).thenReturn(after);
-        when(repository.exists(1L)).thenReturn(true);
-        when(repository.exists(2L)).thenReturn(true);
         when(repository.findOne(after.getId())).thenReturn(after);
         when(repository.findOne(before.getId())).thenReturn(before);
     }

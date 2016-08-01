@@ -30,8 +30,6 @@ import org.trustedanalytics.platformsnapshot.service.diff.PartitionedDiffProcess
 import java.util.Objects;
 import java.util.Optional;
 
-import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
 
 @Service
 public class PlatformSnapshotDiffService {

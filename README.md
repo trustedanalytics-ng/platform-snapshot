@@ -13,6 +13,10 @@ Discovering artifact version from whole platform
 
   Path: /rest/v1/configuration
 
+* Get versions of Trusted Analytics Platform, Cloudera and Cloud Foundry
+
+  Path: /rest/v1/versions
+
 * Get latest snapshots
 
   Path: /rest/v1/snapshots

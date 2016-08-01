@@ -31,31 +31,35 @@ public abstract class AbstractDiffProcessor {
 
     private static final Set<Class<?>> ARTIFACT_TYPES = ImmutableSet.of(CfApplicationArtifact.class, CdhServiceArtifact.class);
 
-    protected Collection<PlatformSnapshotDiffEntry> processChanges(DiffNode root, PlatformSnapshot after, PlatformSnapshot before) {
+    protected Collection<PlatformSnapshotDiffEntry> processDiffs(DiffNode root, PlatformSnapshot after, PlatformSnapshot before) {
         Collection<PlatformSnapshotDiffEntry> diffs = new ArrayList<>();
         root.visit((node, visit) -> {
             if (hasMetricChanged(node)) {
-                Object target = resolveChangedMetric(node, after, before);
-                final Object artifact = resolveArtifactName(node, target);
-
-                if (artifact != null) {
-
-                    PlatformSnapshotDiffEntry diff = new PlatformSnapshotDiffEntry();
-                    diff.setArtifact(artifact.toString());
-                    diff.setMetric(node.getPropertyName());
-                    diff.setOperation(node.getState().toString());
-                    diff.setType(node.getParentNode().getValueType());
-                    diff.setAfter(node.canonicalGet(after));
-                    diff.setBefore(node.canonicalGet(before));
-
-                    if (!isMetricComparable(node)) {
-                        diffs.add(diff);
-                    }
-                }
+                processMetricDiff(node, after, before, diffs);
             }
         });
 
         return diffs;
+    }
+
+    private void processMetricDiff(DiffNode node, PlatformSnapshot after, PlatformSnapshot before, Collection<PlatformSnapshotDiffEntry> diffs) {
+        Object target = resolveChangedMetric(node, after, before);
+        final Object artifact = resolveArtifactName(node, target);
+
+        if (artifact != null) {
+
+            PlatformSnapshotDiffEntry diff = new PlatformSnapshotDiffEntry();
+            diff.setArtifact(artifact.toString());
+            diff.setMetric(node.getPropertyName());
+            diff.setOperation(node.getState().toString());
+            diff.setType(node.getParentNode().getValueType());
+            diff.setAfter(node.canonicalGet(after));
+            diff.setBefore(node.canonicalGet(before));
+
+            if (!isMetricComparable(node)) {
+                diffs.add(diff);
+            }
+        }
     }
 
     private boolean isMetricComparable(DiffNode node) { return "id".equals(node.getPropertyName()); }

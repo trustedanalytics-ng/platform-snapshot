@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
 public class PartitionedDiffProcessor extends AbstractDiffProcessor implements DiffProcessor {
     @Override
     public PlatformSnapshotDiff process(DiffNode root, PlatformSnapshot before, PlatformSnapshot after) {
-        final Collection<PlatformSnapshotDiffEntry> diffs = processChanges(root, after, before);
+        final Collection<PlatformSnapshotDiffEntry> diffs = processDiffs(root, after, before);
 
         final Map<Class<?>, List<PlatformSnapshotDiffEntry>> entriesByType = diffs.stream()
                 .collect(Collectors.groupingBy(PlatformSnapshotDiffEntry::getType, Collectors.toList()));

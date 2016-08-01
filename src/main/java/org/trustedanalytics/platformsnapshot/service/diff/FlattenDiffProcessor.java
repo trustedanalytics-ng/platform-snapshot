@@ -25,7 +25,7 @@ public class FlattenDiffProcessor extends AbstractDiffProcessor implements DiffP
     @Override
     public PlatformSnapshotDiff process(DiffNode root, PlatformSnapshot before, PlatformSnapshot after) {
         return FlattenPlatformSnapshotDiff.builder()
-                .components(processChanges(root, after, before))
+                .components(processDiffs(root, after, before))
                 .createdAtAfter(after.getCreatedAt())
                 .createdAtBefore(before.getCreatedAt()).build();
     }
