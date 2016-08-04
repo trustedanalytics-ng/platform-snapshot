@@ -6,7 +6,7 @@
         </encoder>
     </appender>
 
-    <logger name="de.danielbechler" level="INFO"/>
+    <logger name="de.danielbechler" level="ERROR"/>
     <logger name="org.springframework.security" level="DEBUG"/>
     <logger name="org.trustedanalytics" level="DEBUG"/>
 

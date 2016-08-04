@@ -15,6 +15,7 @@
  */
 package org.trustedanalytics.platformsnapshot.model;
 
+import com.google.common.base.MoreObjects;
 import org.trustedanalytics.platformsnapshot.client.entity.CfApplication;
 import org.trustedanalytics.platformsnapshot.client.entity.CfApplicationEntity;
 import org.trustedanalytics.platformsnapshot.client.entity.CfMetadata;
@@ -131,5 +132,30 @@ public class CfApplicationArtifact implements  Serializable {
     @Override
     public int hashCode() {
         return Objects.hashCode(guid);
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this)
+                .add("id", id)
+                .add("guid", guid)
+                .add("createdAt", createdAt)
+                .add("updatedAt", updatedAt)
+                .add("organization", organization)
+                .add("space", space)
+                .add("name", name)
+                .add("version", version)
+                .add("buildpack", buildpack)
+                .add("detectedBuildpack", detectedBuildpack)
+                .add("command", command)
+                .add("detectedStartCommand", detectedStartCommand)
+                .add("state", state)
+                .add("memory", memory)
+                .add("instances", instances)
+                .add("diskQuota", diskQuota)
+                .add("healthCheckType", healthCheckType)
+                .add("healthCheckTimeout", healthCheckTimeout)
+                .add("scope", scope)
+                .toString();
     }
 }

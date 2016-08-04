@@ -18,6 +18,9 @@ package org.trustedanalytics.platformsnapshot.service;
 
 import de.danielbechler.diff.ObjectDifferBuilder;
 import de.danielbechler.diff.node.DiffNode;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.trustedanalytics.platformsnapshot.model.PlatformSnapshot;
@@ -34,6 +37,8 @@ import java.util.Optional;
 @Service
 public class PlatformSnapshotDiffService {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(PlatformSnapshotDiffService.class);
+
     private final PlatformSnapshotRepository repository;
 
     @Autowired
@@ -42,10 +47,12 @@ public class PlatformSnapshotDiffService {
     }
 
     public PlatformSnapshotDiff diff(long idBefore, long idAfter) {
+        LOGGER.info("Comparing snapshots {} {}", idBefore, idAfter);
         return process(idBefore, idAfter, new FlattenDiffProcessor());
     }
 
     public PlatformSnapshotDiff diffByType(long idBefore, long idAfter) {
+        LOGGER.info("Comparing snapshots {} {}", idBefore, idAfter);
         return process(idBefore, idAfter, new PartitionedDiffProcessor());
     }
 
@@ -54,6 +61,7 @@ public class PlatformSnapshotDiffService {
         final PlatformSnapshot after = findSnapshot(idAfter);
         final DiffNode root = ObjectDifferBuilder.buildDefault().compare(after, before);
 
+        LOGGER.info("Comparing snapshots {} {}", before.getCreatedAt(), after.getCreatedAt());
         return processor.process(root, before, after);
     }
 

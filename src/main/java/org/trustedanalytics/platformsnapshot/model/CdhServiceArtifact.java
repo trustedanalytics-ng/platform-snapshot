@@ -16,6 +16,7 @@
 package org.trustedanalytics.platformsnapshot.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.google.common.base.MoreObjects;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.trustedanalytics.platformsnapshot.client.cdh.entity.CdhService;
@@ -80,4 +81,16 @@ public class CdhServiceArtifact implements Serializable {
 
     @Override
     public int hashCode() { return Objects.hashCode(name); }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this)
+                .add("id", id)
+                .add("name", name)
+                .add("type", type)
+                .add("serviceState", serviceState)
+                .add("healthSummary", healthSummary)
+                .add("entityStatus", entityStatus)
+                .toString();
+    }
 }

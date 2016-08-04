@@ -16,6 +16,7 @@
 package org.trustedanalytics.platformsnapshot.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.google.common.base.MoreObjects;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.trustedanalytics.platformsnapshot.client.entity.CfService;
@@ -86,5 +87,17 @@ public class CfServiceArtifact implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hashCode(guid);
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this)
+                .add("id", id)
+                .add("label", label)
+                .add("description", description)
+                .add("updatedAt", updatedAt)
+                .add("createdAt", createdAt)
+                .add("guid", guid)
+                .toString();
     }
 }

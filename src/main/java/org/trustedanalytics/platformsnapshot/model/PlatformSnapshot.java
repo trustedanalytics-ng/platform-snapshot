@@ -15,11 +15,11 @@
  */
 package org.trustedanalytics.platformsnapshot.model;
 
-import java.io.Serializable;
-import java.util.Collection;
-import java.util.Date;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
+import com.google.common.base.MoreObjects;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -29,12 +29,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
-import com.google.common.base.MoreObjects;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import java.io.Serializable;
+import java.util.Collection;
+import java.util.Date;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "PLATFORM_SNAPSHOT")
@@ -114,9 +113,6 @@ public class PlatformSnapshot implements Serializable {
                 .add("createdAt", createdAt)
                 .add("cdhVersion", cdhVersion)
                 .add("cfVersion", cfVersion)
-                .add("applications", applications)
-                .add("cdhServices", cdhServices)
-                .add("cfServices", cfServices)
                 .toString();
     }
 }
