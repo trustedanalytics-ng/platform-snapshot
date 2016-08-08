@@ -234,7 +234,7 @@
     {
       "guid": "f33278b4-a08c-4011-bb12-cbb55d3f49a4",
       "created_at": 1468209687000,
-      "updated_at": null,
+      "updated_at": 1468209689000,
       "description": "YARN service allow to access resources on hadoop cluster.",
       "label": "yarn"
     },

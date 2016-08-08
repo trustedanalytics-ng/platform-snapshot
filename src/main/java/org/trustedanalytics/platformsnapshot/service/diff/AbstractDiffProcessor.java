@@ -15,40 +15,47 @@
  */
 package org.trustedanalytics.platformsnapshot.service.diff;
 
-import com.google.common.collect.ImmutableSet;
-import de.danielbechler.diff.node.DiffNode;
-import org.springframework.security.util.FieldUtils;
 import org.trustedanalytics.platformsnapshot.model.CdhServiceArtifact;
 import org.trustedanalytics.platformsnapshot.model.CfApplicationArtifact;
 import org.trustedanalytics.platformsnapshot.model.PlatformSnapshot;
 import org.trustedanalytics.platformsnapshot.model.PlatformSnapshotDiffEntry;
 
+import com.google.common.collect.ImmutableSet;
+
+import org.springframework.security.util.FieldUtils;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Set;
 
-public abstract class AbstractDiffProcessor {
+import de.danielbechler.diff.node.DiffNode;
+import de.danielbechler.diff.node.DiffNode.State;
 
-    private static final Set<Class<?>> ARTIFACT_TYPES = ImmutableSet.of(CfApplicationArtifact.class, CdhServiceArtifact.class);
+public abstract class AbstractDiffProcessor implements DiffProcessor {
+
+    private static final Set<Class<?>> CF_ARTIFACTS = ImmutableSet.of(CfApplicationArtifact.class, CdhServiceArtifact.class);
+    private final Set<DiffPostProcessor> postProcessors = ImmutableSet.of(new OperationPostProcessor());
 
     protected Collection<PlatformSnapshotDiffEntry> processDiffs(DiffNode root, PlatformSnapshot after, PlatformSnapshot before) {
-        Collection<PlatformSnapshotDiffEntry> diffs = new ArrayList<>();
+        final Collection<PlatformSnapshotDiffEntry> diffs = new ArrayList<>();
+
         root.visit((node, visit) -> {
             if (hasMetricChanged(node)) {
                 processMetricDiff(node, after, before, diffs);
             }
         });
 
+        postProcessors.forEach(postProcessor -> postProcessor.accept(diffs));
+
         return diffs;
     }
 
     private void processMetricDiff(DiffNode node, PlatformSnapshot after, PlatformSnapshot before, Collection<PlatformSnapshotDiffEntry> diffs) {
-        Object target = resolveChangedMetric(node, after, before);
+        final Object target = resolveChangedMetric(node, after, before);
         final Object artifact = resolveArtifactName(node, target);
 
         if (artifact != null) {
-
-            PlatformSnapshotDiffEntry diff = new PlatformSnapshotDiffEntry();
+            final PlatformSnapshotDiffEntry diff = new PlatformSnapshotDiffEntry();
             diff.setArtifact(artifact.toString());
             diff.setMetric(node.getPropertyName());
             diff.setOperation(node.getState().toString());
@@ -69,12 +76,11 @@ public abstract class AbstractDiffProcessor {
     }
 
     private Object resolveArtifactName(DiffNode node, Object target) {
-        return ARTIFACT_TYPES.contains(node.getParentNode().getValueType()) ? resolveField(target, "name") : resolveField(target, "label");
+        return CF_ARTIFACTS.contains(node.getParentNode().getValueType()) ? resolveField(target, "name") : resolveField(target, "label");
     }
 
     private Object resolveChangedMetric(DiffNode node, PlatformSnapshot after, PlatformSnapshot before) {
-        return DiffNode.State.ADDED.equals(node.getState()) ? node.getParentNode().canonicalGet(after) :
-                node.getParentNode().canonicalGet(before);
+        return State.ADDED.equals(node.getState()) ? node.getParentNode().canonicalGet(after) : node.getParentNode().canonicalGet(before);
     }
 
     private Object resolveField(Object object, String fieldName) {

@@ -336,5 +336,13 @@
 	  "metric": "label",
 	  "before": null,
 	  "after": "gearpump"
-	}]
+	},
+	{
+	  "artifact": "yarn",
+	  "operation": "CHANGED",
+	  "metric": "updatedAt",
+	  "before": null,
+	  "after": 1468209689000
+	}
+  ]
 }
