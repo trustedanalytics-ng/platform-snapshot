@@ -20,7 +20,7 @@ import lombok.Data;
 @Data
 public class PlatformVersion {
 
-    private final String cf;
+    private final String k8s;
     private final String cdh;
     private final String tap;
 

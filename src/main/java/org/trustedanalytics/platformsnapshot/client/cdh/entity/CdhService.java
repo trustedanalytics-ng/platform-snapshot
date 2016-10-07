@@ -16,6 +16,8 @@
 package org.trustedanalytics.platformsnapshot.client.cdh.entity;
 
 import lombok.Data;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Data
 public class CdhService {
@@ -25,4 +27,5 @@ public class CdhService {
     private String serviceState;
     private String healthSummary;
     private String entityStatus;
+
 }

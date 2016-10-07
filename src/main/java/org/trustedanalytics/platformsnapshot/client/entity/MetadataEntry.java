@@ -18,7 +18,8 @@ package org.trustedanalytics.platformsnapshot.client.entity;
 import lombok.Data;
 
 @Data
-public class CfOrganization {
-    private CfMetadata metadata;
-    private CfOrganizationEntity entity;
+public class MetadataEntry {
+
+    private String key;
+    private String value;
 }

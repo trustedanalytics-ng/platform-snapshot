@@ -56,53 +56,37 @@ public class PlatformSnapshot implements Serializable {
     @Column(name="CDH_VERSION")
     private String cdhVersion;
 
-    @Column(name="CF_VERSION")
-    private String cfVersion;
+    @Column(name="K8S_VERSION")
+    private String k8sVersion;
 
     @OneToMany(mappedBy = "snapshot", cascade = CascadeType.ALL)
-    private Collection<CfApplicationArtifact> applications;
+    private Collection<TapApplicationArtifact> applications;
 
     @OneToMany(mappedBy = "snapshot", cascade = CascadeType.ALL)
     private Collection<CdhServiceArtifact> cdhServices;
 
     @OneToMany(mappedBy = "snapshot", cascade = CascadeType.ALL)
-    private Collection<CfServiceArtifact> cfServices;
+    private Collection<TapServiceArtifact> tapServices;
 
     public PlatformSnapshot(Date createdAt,
                             String platformVersion,
-                            Collection<CfApplicationArtifact> applications,
+                            Collection<TapApplicationArtifact> applications,
                             String cdhVersion,
-                            String cfVersion,
+                            String k8sVersion,
                             Collection<CdhServiceArtifact> cdhServices,
-                            Collection<CfServiceArtifact> cfServices) {
+                            Collection<TapServiceArtifact> tapServices) {
 
         this.createdAt = createdAt;
         this.platformVersion = platformVersion;
         this.applications = applications;
         this.cdhServices = cdhServices;
         this.cdhVersion = cdhVersion;
-        this.cfVersion = cfVersion;
-        this.cfServices = cfServices;
+        this.k8sVersion = k8sVersion;
+        this.tapServices = tapServices;
 
         cdhServices.forEach(cdhService -> cdhService.setSnapshot(this));
         applications.forEach(application -> application.setSnapshot(this));
-        cfServices.forEach(cfService -> cfService.setSnapshot(this));
-    }
-
-    public PlatformSnapshot filter(Scope scope) {
-        final Predicate<CfApplicationArtifact> predicate =
-            app -> Scope.ALL.equals(scope) || scope.toString().equals(app.getScope());
-
-        return PlatformSnapshot.builder()
-            .id(id)
-            .createdAt(createdAt)
-            .platformVersion(platformVersion)
-            .cdhVersion(cdhVersion)
-            .cfVersion(cfVersion)
-            .applications(applications.stream().filter(predicate).collect(Collectors.toList()))
-            .cdhServices(cdhServices)
-            .cfServices(cfServices)
-            .build();
+        tapServices.forEach(tapService -> tapService.setSnapshot(this));
     }
 
     @Override
@@ -112,7 +96,7 @@ public class PlatformSnapshot implements Serializable {
                 .add("platformVersion", platformVersion)
                 .add("createdAt", createdAt)
                 .add("cdhVersion", cdhVersion)
-                .add("cfVersion", cfVersion)
+                .add("k8sVersion", k8sVersion)
                 .toString();
     }
 }

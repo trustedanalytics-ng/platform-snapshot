@@ -15,12 +15,11 @@
  */
 package org.trustedanalytics.platformsnapshot.service;
 
-import org.trustedanalytics.platformsnapshot.client.CfOperations;
-import org.trustedanalytics.platformsnapshot.client.PlatformContext;
-import org.trustedanalytics.platformsnapshot.client.PlatformContextOperations;
+import org.springframework.context.annotation.Profile;
+import org.trustedanalytics.platformsnapshot.client.TapOperations;
 import org.trustedanalytics.platformsnapshot.client.cdh.CdhOperations;
 import org.trustedanalytics.platformsnapshot.client.cdh.entity.CdhCluster;
-import org.trustedanalytics.platformsnapshot.client.entity.CfInfo;
+import org.trustedanalytics.platformsnapshot.client.entity.TapInfo;
 import org.trustedanalytics.platformsnapshot.model.PlatformVersion;
 
 import org.slf4j.Logger;
@@ -34,43 +33,41 @@ import java.util.function.Supplier;
 import rx.Observable;
 
 @Service
+@Profile("cloud")
 public class PlatformVersionSupplier implements Supplier<Observable<PlatformVersion>> {
 
     private static final Logger LOG = LoggerFactory.getLogger(PlatformVersionSupplier.class);
 
-    private final CfOperations cfOperations;
+    private final TapOperations tapOperations;
     private final CdhOperations cdhOperations;
-    private final PlatformContextOperations ctxOperations;
 
     @Autowired
-    public PlatformVersionSupplier(CfOperations cfOperations, CdhOperations cdhOperations,
-        PlatformContextOperations ctxOperations) {
-        this.cfOperations = Objects.requireNonNull(cfOperations, "cfOperations");
+    public PlatformVersionSupplier(TapOperations tapOperations, CdhOperations cdhOperations) {
+        this.tapOperations = Objects.requireNonNull(tapOperations,"tapOperations");
         this.cdhOperations = Objects.requireNonNull(cdhOperations, "cdhOperations");
-        this.ctxOperations = Objects.requireNonNull(ctxOperations, "ctxOperations");
     }
 
     @Override
     public Observable<PlatformVersion> get() {
-        return Observable.zip(cfVersion(), cdhVersion(), tapVersion(), PlatformVersion::new);
+        return Observable.zip(k8sVersion(), cdhVersion(), tapVersion(), PlatformVersion::new);
     }
 
-    private Observable<String> cfVersion() {
-        return Observable.defer(cfOperations::getCfInfo)
-            .map(CfInfo::getApiVersion)
+    private Observable<String> k8sVersion() {
+        return Observable.defer(tapOperations::getTapInfo)
+            .map(TapInfo::getK8sVersion)
             .onErrorResumeNext(ex -> {
-                LOG.error("Request for cloud foundry version failed", ex);
+                LOG.error("Request for k8s version failed", ex);
                 return Observable.just(null);
             });
     }
 
     private Observable<String> tapVersion() {
-        return Observable.defer(() -> Observable.just(ctxOperations.getPlatformContext()))
-            .map(PlatformContext::getPlatformVersion)
-            .onErrorResumeNext(ex -> {
-                LOG.error("Request for trusted analytics platform version failed", ex);
-                return Observable.just(null);
-            });
+        return Observable.defer(tapOperations::getTapInfo)
+                .map(TapInfo::getPlatformVersion)
+                .onErrorResumeNext(ex -> {
+                    LOG.error("Request for platform version failed", ex);
+                    return Observable.just(null);
+                });
     }
 
     private Observable<String> cdhVersion() {

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.trustedanalytics.platformsnapshot.client;
+package org.trustedanalytics.platformsnapshot.client.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,12 +22,13 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class PlatformContext {
-
+public class TapInfo {
     private String apiEndpoint;
     private String cliVersion;
-    private String cliUrl;
-    private String coreOrganization;
+    private String cliUri;
     private String platformVersion;
-
+    private String coreOrganization;
+    private TapExternalTools externalTools;
+    private String cdhVersion;
+    private String k8sVersion;
 }

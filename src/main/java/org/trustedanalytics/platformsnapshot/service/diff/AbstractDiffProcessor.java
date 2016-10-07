@@ -16,7 +16,7 @@
 package org.trustedanalytics.platformsnapshot.service.diff;
 
 import org.trustedanalytics.platformsnapshot.model.CdhServiceArtifact;
-import org.trustedanalytics.platformsnapshot.model.CfApplicationArtifact;
+import org.trustedanalytics.platformsnapshot.model.TapApplicationArtifact;
 import org.trustedanalytics.platformsnapshot.model.PlatformSnapshot;
 import org.trustedanalytics.platformsnapshot.model.PlatformSnapshotDiffEntry;
 
@@ -33,7 +33,7 @@ import de.danielbechler.diff.node.DiffNode.State;
 
 public abstract class AbstractDiffProcessor implements DiffProcessor {
 
-    private static final Set<Class<?>> CF_ARTIFACTS = ImmutableSet.of(CfApplicationArtifact.class, CdhServiceArtifact.class);
+    private static final Set<Class<?>> TAP_ARTIFACTS = ImmutableSet.of(TapApplicationArtifact.class, CdhServiceArtifact.class);
     private final Set<DiffPostProcessor> postProcessors = ImmutableSet.of(new OperationPostProcessor());
 
     protected Collection<PlatformSnapshotDiffEntry> processDiffs(DiffNode root, PlatformSnapshot after, PlatformSnapshot before) {
@@ -76,7 +76,7 @@ public abstract class AbstractDiffProcessor implements DiffProcessor {
     }
 
     private Object resolveArtifactName(DiffNode node, Object target) {
-        return CF_ARTIFACTS.contains(node.getParentNode().getValueType()) ? resolveField(target, "name") : resolveField(target, "label");
+        return TAP_ARTIFACTS.contains(node.getParentNode().getValueType()) ? resolveField(target, "name") : resolveField(target, "label");
     }
 
     private Object resolveChangedMetric(DiffNode node, PlatformSnapshot after, PlatformSnapshot before) {

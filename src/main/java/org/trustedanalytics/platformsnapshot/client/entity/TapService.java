@@ -18,6 +18,8 @@ package org.trustedanalytics.platformsnapshot.client.entity;
 import lombok.Data;
 
 @Data
-public class CfOrganizationEntity {
-    private String name;
+public class TapService {
+
+    private TapServiceEntity entity;
+    private TapMetadata metadata;
 }

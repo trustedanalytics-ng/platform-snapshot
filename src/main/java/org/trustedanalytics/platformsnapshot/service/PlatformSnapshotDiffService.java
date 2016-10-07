@@ -18,7 +18,6 @@ package org.trustedanalytics.platformsnapshot.service;
 
 import de.danielbechler.diff.ObjectDifferBuilder;
 import de.danielbechler.diff.node.DiffNode;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,8 +25,8 @@ import org.springframework.stereotype.Service;
 import org.trustedanalytics.platformsnapshot.model.PlatformSnapshot;
 import org.trustedanalytics.platformsnapshot.model.PlatformSnapshotDiff;
 import org.trustedanalytics.platformsnapshot.persistence.PlatformSnapshotRepository;
-import org.trustedanalytics.platformsnapshot.service.diff.FlattenDiffProcessor;
 import org.trustedanalytics.platformsnapshot.service.diff.DiffProcessor;
+import org.trustedanalytics.platformsnapshot.service.diff.FlattenDiffProcessor;
 import org.trustedanalytics.platformsnapshot.service.diff.PartitionedDiffProcessor;
 
 import java.util.Objects;

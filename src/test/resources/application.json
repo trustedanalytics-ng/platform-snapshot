@@ -1,0 +1,35 @@
+[
+  {
+    "running_instances": 1,
+    "disk_quota": "1024MB",
+    "memory": "256MB",
+    "imageType": "PYTHON",
+    "urls": [
+      "my-python-app.aaiokrb.gotapaas.eu"
+    ],
+    "imageState": "READY",
+    "replication": 1,
+    "id": "b801d339-da6f-4817-4d22-8ad2ae136d7d",
+    "name": "my-python-app",
+    "type": "",
+    "classId": "",
+    "bindings": null,
+    "metadata": [
+      {
+        "value": "127.0.0.1:30000/image-f6c52310-0aa1-49f0-4913-04200638f4a5",
+        "key": "APPLICATION_IMAGE_ADDRESS"
+      },
+      {
+        "value": "my-python-app.aaiokrb.gotapaas.eu",
+        "key": "urls"
+      }
+    ],
+    "state": "FAILURE",
+    "auditTrail": {
+      "lastUpdateBy": "admin",
+      "lastUpdatedOn": 1476183722,
+      "createdBy": "admin",
+      "createdOn": 1476183707
+    }
+  }
+]

@@ -22,6 +22,7 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.orm.jpa.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
@@ -32,6 +33,7 @@ import javax.sql.DataSource;
 @EnableJpaRepositories(basePackages = "org.trustedanalytics.platformsnapshot.persistence")
 @EnableAutoConfiguration
 @EntityScan(basePackages = {"org.trustedanalytics.platformsnapshot.model"})
+@Profile("cloud")
 public class RepositoryConfig {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RepositoryConfig.class);

@@ -62,7 +62,7 @@ public class PlatformSnapshotControllerTest {
         LocalDateTime from = LocalDateTime.of(2016, 5, 11, 9, 45, 0);
         LocalDateTime to = LocalDateTime.of(2016, 5, 10, 9, 45, 0);
 
-        platformSnapshotController.getPlatformSnapshot(Optional.of(from), Optional.of(to), Optional.empty());
+        platformSnapshotController.getPlatformSnapshot(Optional.of(from), Optional.of(to));
         verify(platformSnapshotRepository).findByDates(Date.from(from.toInstant(ZoneOffset.UTC)), Date.from(to.toInstant(ZoneOffset.UTC)));
     }
 
@@ -79,7 +79,7 @@ public class PlatformSnapshotControllerTest {
         Date expectedFromPlusMinute = Date.from(LocalDateTime.now().minusDays(defaultDaysRange).plusMinutes(minutesOffset).toInstant(ZoneOffset.UTC));
         Date expectedToPlusMinute = Date.from(LocalDateTime.now().plusMinutes(minutesOffset).toInstant(ZoneOffset.UTC));
 
-        platformSnapshotController.getPlatformSnapshot(Optional.empty(), Optional.empty(), Optional.empty());
+        platformSnapshotController.getPlatformSnapshot(Optional.empty(), Optional.empty());
         verify(platformSnapshotRepository).findByDates(from.capture(), to.capture());
 
         assertTrue(expectedFromMinusMinute.before(from.getValue()));
@@ -112,14 +112,4 @@ public class PlatformSnapshotControllerTest {
         verify(platformSnapshotDiffService).diffByType(1L, 2L);
     }
 
-    @Test
-    public void testGetPlatformSnapshotConfiguration() {
-        PlatformSnapshotConfiguration actualConfiguration = platformSnapshotController.getPlatformConfiguration();
-        PlatformSnapshotConfiguration expectedConfiguration = getPlatformSnapshotConfiguration();
-        assertEquals(expectedConfiguration, actualConfiguration);
-    }
-
-    private PlatformSnapshotConfiguration getPlatformSnapshotConfiguration() {
-        return new PlatformSnapshotConfiguration(new ArrayList<>(Arrays.asList("CORE", "DEMO", "OTHER", "ALL")));
-    }
 }

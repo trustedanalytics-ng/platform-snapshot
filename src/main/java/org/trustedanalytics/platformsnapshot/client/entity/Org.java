@@ -13,13 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.trustedanalytics.platformsnapshot.client.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.util.UUID;
 
 @Data
-public class CfService {
-
-    private CfServiceEntity entity;
-    private CfMetadata metadata;
+@AllArgsConstructor
+@NoArgsConstructor
+public class Org {
+    private UUID guid;
+    private String name;
 }

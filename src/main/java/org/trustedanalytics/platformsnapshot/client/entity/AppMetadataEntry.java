@@ -13,14 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.trustedanalytics.platformsnapshot.client;
+package org.trustedanalytics.platformsnapshot.client.entity;
 
-import feign.Headers;
-import feign.RequestLine;
+import lombok.Data;
 
-@Headers("Content-Type: application/json")
-public interface PlatformContextOperations {
-
-    @RequestLine("GET /rest/platform_context")
-    PlatformContext getPlatformContext();
+@Data
+public class AppMetadataEntry {
+    private String key;
+    private String value;
 }

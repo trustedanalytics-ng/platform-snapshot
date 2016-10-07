@@ -15,17 +15,27 @@
  */
 package org.trustedanalytics.platformsnapshot.client.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
-import java.net.URI;
-import java.util.List;
+import java.util.Set;
 
 @Data
-public class CfPage<T> {
+public class TapApplication {
+    private Long runningInstances;
+    private String diskQuota;
+    private String memory;
+    private String imageType;
+    private Set<String> urls;
+    private String imageState;
+    private String replication;
+    private String id;
+    private String name;
+    private String type;
+    private String ClassId;
+    private String state;
+    private AppMetadataEntry metadata[];
 
-    private int totalResults;
-    private int totalPages;
-    private URI nextUrl;
-    private URI prevUrl;
-    private List<T> resources;
+    @JsonProperty("auditTrail")
+    private AuditTrail auditTrail;
 }

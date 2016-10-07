@@ -17,8 +17,8 @@ package org.trustedanalytics.platformsnapshot.service.diff;
 
 import de.danielbechler.diff.node.DiffNode;
 import org.trustedanalytics.platformsnapshot.model.CdhServiceArtifact;
-import org.trustedanalytics.platformsnapshot.model.CfApplicationArtifact;
-import org.trustedanalytics.platformsnapshot.model.CfServiceArtifact;
+import org.trustedanalytics.platformsnapshot.model.TapApplicationArtifact;
+import org.trustedanalytics.platformsnapshot.model.TapServiceArtifact;
 import org.trustedanalytics.platformsnapshot.model.PartitionedPlatformSnapshotDiff;
 import org.trustedanalytics.platformsnapshot.model.PlatformSnapshot;
 import org.trustedanalytics.platformsnapshot.model.PlatformSnapshotDiff;
@@ -38,9 +38,9 @@ public class PartitionedDiffProcessor extends AbstractDiffProcessor implements D
                 .collect(Collectors.groupingBy(PlatformSnapshotDiffEntry::getType, Collectors.toList()));
 
         return PartitionedPlatformSnapshotDiff.builder()
-                .applications(entriesByType.get(CfApplicationArtifact.class))
+                .applications(entriesByType.get(TapApplicationArtifact.class))
                 .cdhServices(entriesByType.get(CdhServiceArtifact.class))
-                .cfServices(entriesByType.get(CfServiceArtifact.class))
+                .tapServices(entriesByType.get(TapServiceArtifact.class))
                 .createdAtAfter(after.getCreatedAt())
                 .createdAtBefore(before.getCreatedAt())
                 .build();

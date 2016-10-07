@@ -29,10 +29,9 @@ import javax.servlet.http.HttpServletResponse;
 
 public class AdminInterceptor extends HandlerInterceptorAdapter {
 
-    private static final String ADMIN_SCOPE = "cloud_controller.admin";
+    private static final String ADMIN_SCOPE = "tap.admin";
 
     private final OAuth2TokenSupplier tokenSupplier;
-
 
     public AdminInterceptor(OAuth2TokenSupplier supplier) {
         this.tokenSupplier = Objects.requireNonNull(supplier, "OAuth2TokenSupplier");

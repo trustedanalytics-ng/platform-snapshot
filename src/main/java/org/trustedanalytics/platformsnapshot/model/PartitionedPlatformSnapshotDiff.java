@@ -37,7 +37,7 @@ public class PartitionedPlatformSnapshotDiff implements PlatformSnapshotDiff{
     @JsonProperty
     private Collection<PlatformSnapshotDiffEntry> applications;
     @JsonProperty
-    private Collection<PlatformSnapshotDiffEntry> cfServices;
+    private Collection<PlatformSnapshotDiffEntry> tapServices;
     @JsonProperty
     private Collection<PlatformSnapshotDiffEntry> cdhServices;
 }

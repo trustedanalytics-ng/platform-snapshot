@@ -19,7 +19,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.base.MoreObjects;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.trustedanalytics.platformsnapshot.client.entity.CfService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.trustedanalytics.platformsnapshot.client.entity.TapService;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -37,10 +39,11 @@ import java.util.Objects;
 import java.util.Optional;
 
 @Data
-@Table(name = "CF_SERVICE_ARTIFACT")
+@Table(name = "TAP_SERVICE_ARTIFACT")
 @NoArgsConstructor
 @Entity
-public class CfServiceArtifact implements Serializable {
+public class TapServiceArtifact implements Serializable {
+    private static final Logger LOGGER = LoggerFactory.getLogger(TapServiceArtifact.class);
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
@@ -63,13 +66,15 @@ public class CfServiceArtifact implements Serializable {
     @Column(name="GUID")
     private String guid;
 
-    public CfServiceArtifact(CfService cfService) {
+    public TapServiceArtifact(TapService tapService) {
 
-            this.label = cfService.getEntity().getLabel();
-            this.description = cfService.getEntity().getDescription();
-            this.updatedAt = Optional.ofNullable(cfService.getMetadata().getUpdatedAt()).map(date -> Date.from(date.toInstant(ZoneOffset.UTC))).orElse(null);
-            this.createdAt = Date.from(cfService.getMetadata().getCreatedAt().toInstant(ZoneOffset.UTC));
-            this.guid = cfService.getMetadata().getGuid().toString();
+            this.label = tapService.getEntity().getLabel();
+            this.description = tapService.getEntity().getDescription();
+            this.updatedAt = Optional.ofNullable(tapService.getMetadata().getUpdatedAt()).map(date -> Date.from(date.toInstant(ZoneOffset.UTC))).orElse(null);
+            this.createdAt = Optional.ofNullable(tapService.getMetadata().getCreatedAt()).map(date -> Date.from(date.toInstant(ZoneOffset.UTC))).orElse(null);
+            this.guid = tapService.getMetadata().getGuid().toString();
+            LOGGER.info("Creating service artifact: {} ", toString());
+
     }
 
     @Override
@@ -78,10 +83,10 @@ public class CfServiceArtifact implements Serializable {
             return true;
         } else if(other == null) {
             return false;
-        } else if(!other.getClass().equals(CfServiceArtifact.class)) {
+        } else if(!other.getClass().equals(TapServiceArtifact.class)) {
             return false;
         }
-        return Objects.equals(guid,((CfServiceArtifact) other).getGuid());
+        return Objects.equals(guid, ((TapServiceArtifact) other).getGuid());
     }
 
     @Override

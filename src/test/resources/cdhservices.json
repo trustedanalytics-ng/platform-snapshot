@@ -1,0 +1,333 @@
+{
+  "items" : [ {
+    "name" : "ZOOKEEPER",
+    "type" : "ZOOKEEPER",
+    "clusterRef" : {
+      "clusterName" : "CDH-cluster"
+    },
+    "serviceUrl" : "http://manager.cdh.cluster.local:7180/cmf/serviceRedirect/ZOOKEEPER",
+    "roleInstancesUrl" : "http://manager.cdh.cluster.local:7180/cmf/serviceRedirect/ZOOKEEPER/instances",
+    "serviceState" : "STARTED",
+    "healthSummary" : "CONCERNING",
+    "healthChecks" : [ {
+      "name" : "ZOOKEEPER_CANARY_HEALTH",
+      "summary" : "GOOD",
+      "suppressed" : false
+    }, {
+      "name" : "ZOOKEEPER_SERVERS_HEALTHY",
+      "summary" : "CONCERNING",
+      "suppressed" : false
+    } ],
+    "configStalenessStatus" : "FRESH",
+    "clientConfigStalenessStatus" : "FRESH",
+    "maintenanceMode" : false,
+    "maintenanceOwners" : [ ],
+    "displayName" : "ZOOKEEPER",
+    "entityStatus" : "CONCERNING_HEALTH"
+  }, {
+    "name" : "HDFS",
+    "type" : "HDFS",
+    "clusterRef" : {
+      "clusterName" : "CDH-cluster"
+    },
+    "serviceUrl" : "http://manager.cdh.cluster.local:7180/cmf/serviceRedirect/HDFS",
+    "roleInstancesUrl" : "http://manager.cdh.cluster.local:7180/cmf/serviceRedirect/HDFS/instances",
+    "serviceState" : "STARTED",
+    "healthSummary" : "GOOD",
+    "healthChecks" : [ {
+      "name" : "HDFS_BLOCKS_WITH_CORRUPT_REPLICAS",
+      "summary" : "GOOD",
+      "suppressed" : false
+    }, {
+      "name" : "HDFS_CANARY_HEALTH",
+      "summary" : "GOOD",
+      "suppressed" : false
+    }, {
+      "name" : "HDFS_DATA_NODES_HEALTHY",
+      "summary" : "GOOD",
+      "suppressed" : false
+    }, {
+      "name" : "HDFS_FAILOVER_CONTROLLERS_HEALTHY",
+      "summary" : "GOOD",
+      "suppressed" : false
+    }, {
+      "name" : "HDFS_FREE_SPACE_REMAINING",
+      "summary" : "GOOD",
+      "suppressed" : false
+    }, {
+      "name" : "HDFS_HA_NAMENODE_HEALTH",
+      "summary" : "GOOD",
+      "suppressed" : false
+    }, {
+      "name" : "HDFS_MISSING_BLOCKS",
+      "summary" : "GOOD",
+      "suppressed" : false
+    }, {
+      "name" : "HDFS_UNDER_REPLICATED_BLOCKS",
+      "summary" : "GOOD",
+      "suppressed" : false
+    } ],
+    "configStalenessStatus" : "FRESH",
+    "clientConfigStalenessStatus" : "FRESH",
+    "maintenanceMode" : false,
+    "maintenanceOwners" : [ ],
+    "displayName" : "HDFS",
+    "entityStatus" : "GOOD_HEALTH"
+  }, {
+    "name" : "HBASE",
+    "type" : "HBASE",
+    "clusterRef" : {
+      "clusterName" : "CDH-cluster"
+    },
+    "serviceUrl" : "http://manager.cdh.cluster.local:7180/cmf/serviceRedirect/HBASE",
+    "roleInstancesUrl" : "http://manager.cdh.cluster.local:7180/cmf/serviceRedirect/HBASE/instances",
+    "serviceState" : "STARTED",
+    "healthSummary" : "CONCERNING",
+    "healthChecks" : [ {
+      "name" : "HBASE_MASTER_HEALTH",
+      "summary" : "CONCERNING",
+      "suppressed" : false
+    }, {
+      "name" : "HBASE_REGION_SERVERS_HEALTHY",
+      "summary" : "GOOD",
+      "suppressed" : false
+    } ],
+    "configStalenessStatus" : "FRESH",
+    "clientConfigStalenessStatus" : "FRESH",
+    "maintenanceMode" : false,
+    "maintenanceOwners" : [ ],
+    "displayName" : "HBASE",
+    "entityStatus" : "CONCERNING_HEALTH"
+  }, {
+    "name" : "YARN",
+    "type" : "YARN",
+    "clusterRef" : {
+      "clusterName" : "CDH-cluster"
+    },
+    "serviceUrl" : "http://manager.cdh.cluster.local:7180/cmf/serviceRedirect/YARN",
+    "roleInstancesUrl" : "http://manager.cdh.cluster.local:7180/cmf/serviceRedirect/YARN/instances",
+    "serviceState" : "STARTED",
+    "healthSummary" : "CONCERNING",
+    "healthChecks" : [ {
+      "name" : "YARN_JOBHISTORY_HEALTH",
+      "summary" : "CONCERNING",
+      "suppressed" : false
+    }, {
+      "name" : "YARN_NODE_MANAGERS_HEALTHY",
+      "summary" : "GOOD",
+      "suppressed" : false
+    }, {
+      "name" : "YARN_RESOURCEMANAGERS_HEALTH",
+      "summary" : "GOOD",
+      "suppressed" : false
+    }, {
+      "name" : "YARN_USAGE_AGGREGATION_HEALTH",
+      "summary" : "DISABLED",
+      "suppressed" : false
+    } ],
+    "configStalenessStatus" : "FRESH",
+    "clientConfigStalenessStatus" : "FRESH",
+    "maintenanceMode" : false,
+    "maintenanceOwners" : [ ],
+    "displayName" : "YARN",
+    "entityStatus" : "CONCERNING_HEALTH"
+  }, {
+    "name" : "SPARK_ON_YARN",
+    "type" : "SPARK_ON_YARN",
+    "clusterRef" : {
+      "clusterName" : "CDH-cluster"
+    },
+    "serviceUrl" : "http://manager.cdh.cluster.local:7180/cmf/serviceRedirect/SPARK_ON_YARN",
+    "roleInstancesUrl" : "http://manager.cdh.cluster.local:7180/cmf/serviceRedirect/SPARK_ON_YARN/instances",
+    "serviceState" : "STARTED",
+    "healthSummary" : "GOOD",
+    "healthChecks" : [ ],
+    "configStalenessStatus" : "FRESH",
+    "clientConfigStalenessStatus" : "FRESH",
+    "maintenanceMode" : false,
+    "maintenanceOwners" : [ ],
+    "displayName" : "SPARK_ON_YARN",
+    "entityStatus" : "GOOD_HEALTH"
+  }, {
+    "name" : "HIVE",
+    "type" : "HIVE",
+    "clusterRef" : {
+      "clusterName" : "CDH-cluster"
+    },
+    "serviceUrl" : "http://manager.cdh.cluster.local:7180/cmf/serviceRedirect/HIVE",
+    "roleInstancesUrl" : "http://manager.cdh.cluster.local:7180/cmf/serviceRedirect/HIVE/instances",
+    "serviceState" : "STARTED",
+    "healthSummary" : "CONCERNING",
+    "healthChecks" : [ {
+      "name" : "HIVE_HIVEMETASTORES_HEALTHY",
+      "summary" : "CONCERNING",
+      "suppressed" : false
+    }, {
+      "name" : "HIVE_HIVESERVER2S_HEALTHY",
+      "summary" : "CONCERNING",
+      "suppressed" : false
+    }, {
+      "name" : "HIVE_WEBHCATS_HEALTHY",
+      "summary" : "CONCERNING",
+      "suppressed" : false
+    } ],
+    "configStalenessStatus" : "FRESH",
+    "clientConfigStalenessStatus" : "FRESH",
+    "maintenanceMode" : false,
+    "maintenanceOwners" : [ ],
+    "displayName" : "HIVE",
+    "entityStatus" : "CONCERNING_HEALTH"
+  }, {
+    "name" : "OOZIE",
+    "type" : "OOZIE",
+    "clusterRef" : {
+      "clusterName" : "CDH-cluster"
+    },
+    "serviceUrl" : "http://manager.cdh.cluster.local:7180/cmf/serviceRedirect/OOZIE",
+    "roleInstancesUrl" : "http://manager.cdh.cluster.local:7180/cmf/serviceRedirect/OOZIE/instances",
+    "serviceState" : "STARTED",
+    "healthSummary" : "CONCERNING",
+    "healthChecks" : [ {
+      "name" : "OOZIE_OOZIE_SERVERS_HEALTHY",
+      "summary" : "CONCERNING",
+      "suppressed" : false
+    } ],
+    "configStalenessStatus" : "FRESH",
+    "clientConfigStalenessStatus" : "FRESH",
+    "maintenanceMode" : false,
+    "maintenanceOwners" : [ ],
+    "displayName" : "OOZIE",
+    "entityStatus" : "CONCERNING_HEALTH"
+  }, {
+    "name" : "HUE",
+    "type" : "HUE",
+    "clusterRef" : {
+      "clusterName" : "CDH-cluster"
+    },
+    "serviceUrl" : "http://manager.cdh.cluster.local:7180/cmf/serviceRedirect/HUE",
+    "roleInstancesUrl" : "http://manager.cdh.cluster.local:7180/cmf/serviceRedirect/HUE/instances",
+    "serviceState" : "STARTED",
+    "healthSummary" : "CONCERNING",
+    "healthChecks" : [ {
+      "name" : "HUE_HUE_SERVERS_HEALTHY",
+      "summary" : "CONCERNING",
+      "suppressed" : false
+    }, {
+      "name" : "HUE_KT_RENEWERS_HEALTHY",
+      "summary" : "CONCERNING",
+      "suppressed" : false
+    } ],
+    "configStalenessStatus" : "FRESH",
+    "clientConfigStalenessStatus" : "FRESH",
+    "maintenanceMode" : false,
+    "maintenanceOwners" : [ ],
+    "displayName" : "HUE",
+    "entityStatus" : "CONCERNING_HEALTH"
+  }, {
+    "name" : "HADOOPGROUPSMAPPING",
+    "type" : "HADOOPGROUPSMAPPING",
+    "clusterRef" : {
+      "clusterName" : "CDH-cluster"
+    },
+    "serviceUrl" : "http://manager.cdh.cluster.local:7180/cmf/serviceRedirect/HADOOPGROUPSMAPPING",
+    "roleInstancesUrl" : "http://manager.cdh.cluster.local:7180/cmf/serviceRedirect/HADOOPGROUPSMAPPING/instances",
+    "serviceState" : "STARTED",
+    "healthSummary" : "GOOD",
+    "healthChecks" : [ ],
+    "configStalenessStatus" : "FRESH",
+    "clientConfigStalenessStatus" : "FRESH",
+    "maintenanceMode" : false,
+    "maintenanceOwners" : [ ],
+    "displayName" : "HADOOPGROUPSMAPPING",
+    "entityStatus" : "GOOD_HEALTH"
+  }, {
+    "name" : "KAFKA",
+    "type" : "KAFKA",
+    "clusterRef" : {
+      "clusterName" : "CDH-cluster"
+    },
+    "serviceUrl" : "http://manager.cdh.cluster.local:7180/cmf/serviceRedirect/KAFKA",
+    "roleInstancesUrl" : "http://manager.cdh.cluster.local:7180/cmf/serviceRedirect/KAFKA/instances",
+    "serviceState" : "STARTED",
+    "healthSummary" : "GOOD",
+    "healthChecks" : [ ],
+    "configStalenessStatus" : "FRESH",
+    "clientConfigStalenessStatus" : "FRESH",
+    "maintenanceMode" : false,
+    "maintenanceOwners" : [ ],
+    "displayName" : "KAFKA",
+    "entityStatus" : "GOOD_HEALTH"
+  }, {
+    "name" : "SQOOP_CLIENT",
+    "type" : "SQOOP_CLIENT",
+    "clusterRef" : {
+      "clusterName" : "CDH-cluster"
+    },
+    "serviceUrl" : "http://manager.cdh.cluster.local:7180/cmf/serviceRedirect/SQOOP_CLIENT",
+    "roleInstancesUrl" : "http://manager.cdh.cluster.local:7180/cmf/serviceRedirect/SQOOP_CLIENT/instances",
+    "serviceState" : "NA",
+    "healthSummary" : "GOOD",
+    "healthChecks" : [ ],
+    "configStalenessStatus" : "FRESH",
+    "clientConfigStalenessStatus" : "FRESH",
+    "maintenanceMode" : false,
+    "maintenanceOwners" : [ ],
+    "displayName" : "SQOOP_CLIENT",
+    "entityStatus" : "NONE"
+  }, {
+    "name" : "SQOOP_METASTORE",
+    "type" : "SQOOP_METASTORE",
+    "clusterRef" : {
+      "clusterName" : "CDH-cluster"
+    },
+    "serviceUrl" : "http://manager.cdh.cluster.local:7180/cmf/serviceRedirect/SQOOP_METASTORE",
+    "roleInstancesUrl" : "http://manager.cdh.cluster.local:7180/cmf/serviceRedirect/SQOOP_METASTORE/instances",
+    "serviceState" : "STARTED",
+    "healthSummary" : "GOOD",
+    "healthChecks" : [ ],
+    "configStalenessStatus" : "FRESH",
+    "clientConfigStalenessStatus" : "FRESH",
+    "maintenanceMode" : false,
+    "maintenanceOwners" : [ ],
+    "displayName" : "SQOOP_METASTORE",
+    "entityStatus" : "GOOD_HEALTH"
+  }, {
+    "name" : "KMS",
+    "type" : "KMS",
+    "clusterRef" : {
+      "clusterName" : "CDH-cluster"
+    },
+    "serviceUrl" : "http://manager.cdh.cluster.local:7180/cmf/serviceRedirect/KMS",
+    "roleInstancesUrl" : "http://manager.cdh.cluster.local:7180/cmf/serviceRedirect/KMS/instances",
+    "serviceState" : "STARTED",
+    "healthSummary" : "GOOD",
+    "healthChecks" : [ ],
+    "configStalenessStatus" : "FRESH",
+    "clientConfigStalenessStatus" : "FRESH",
+    "maintenanceMode" : false,
+    "maintenanceOwners" : [ ],
+    "displayName" : "KMS",
+    "entityStatus" : "GOOD_HEALTH"
+  }, {
+    "name" : "SENTRY",
+    "type" : "SENTRY",
+    "clusterRef" : {
+      "clusterName" : "CDH-cluster"
+    },
+    "serviceUrl" : "http://manager.cdh.cluster.local:7180/cmf/serviceRedirect/SENTRY",
+    "roleInstancesUrl" : "http://manager.cdh.cluster.local:7180/cmf/serviceRedirect/SENTRY/instances",
+    "serviceState" : "STARTED",
+    "healthSummary" : "CONCERNING",
+    "healthChecks" : [ {
+      "name" : "SENTRY_SENTRY_SERVERS_HEALTHY",
+      "summary" : "CONCERNING",
+      "suppressed" : false
+    } ],
+    "configStalenessStatus" : "FRESH",
+    "clientConfigStalenessStatus" : "FRESH",
+    "maintenanceMode" : false,
+    "maintenanceOwners" : [ ],
+    "displayName" : "SENTRY",
+    "entityStatus" : "CONCERNING_HEALTH"
+  } ]
+}

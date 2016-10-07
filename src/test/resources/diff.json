@@ -11,13 +11,6 @@
 	{
 	  "artifact": "workflow-scheduler",
 	  "operation": "ADDED",
-	  "metric": "detectedBuildpack",
-	  "before": null,
-	  "after": "java-buildpack=v3.4-offline-https://github.com/cloudfoundry/java-buildpack.git#5cb22f2 java-main open-jdk-like-jre=1.8.0_65 open-jdk-like-memory-calculator=2.0.1_RELEASE spring-auto-reconfiguration=1.10.0_RELEASE"
-	},
-	{
-	  "artifact": "workflow-scheduler",
-	  "operation": "ADDED",
 	  "metric": "detectedStartCommand",
 	  "before": null,
 	  "after": "CALCULATED_MEMORY=$($PWD/.java-buildpack/open_jdk_jre/bin/java-buildpack-memory-calculator-2.0.1_RELEASE -memorySizes=metaspace:64m.. -memoryWeights=heap:75,metaspace:10,native:10,stack:5 -memoryInitials=heap:100%,metaspace:100% -totMemory=$MEMORY_LIMIT) && JAVA_OPTS=\"-Djava.io.tmpdir=$TMPDIR -XX:OnOutOfMemoryError=$PWD/.java-buildpack/open_jdk_jre/bin/killjava.sh $CALCULATED_MEMORY\" && SERVER_PORT=$PORT eval exec $PWD/.java-buildpack/open_jdk_jre/bin/java $JAVA_OPTS -cp $PWD/.:$PWD/.java-buildpack/spring_auto_reconfiguration/spring_auto_reconfiguration-1.10.0_RELEASE.jar org.springframework.boot.loader.JarLauncher"
@@ -82,15 +75,8 @@
 	  "artifact": "workflow-scheduler",
 	  "operation": "ADDED",
 	  "metric": "scope",
-	  "before": null,
+	  "before": "null",
 	  "after": "CORE"
-	},
-	{
-	  "artifact": "workflow-scheduler",
-	  "operation": "ADDED",
-	  "metric": "space",
-	  "before": null,
-	  "after": "d71cc2b3-b940-4454-b7c0-68b148466133"
 	},
 	{
 	  "artifact": "workflow-scheduler",
@@ -118,13 +104,6 @@
 	  "operation": "REMOVED",
 	  "metric": "createdAt",
 	  "before": 1468208905000,
-	  "after": null
-	},
-	{
-	  "artifact": "h2o-model-catalog",
-	  "operation": "REMOVED",
-	  "metric": "detectedBuildpack",
-	  "before": "java-buildpack=v3.4-offline-https://github.com/cloudfoundry/java-buildpack.git#5cb22f2 java-main open-jdk-like-jre=1.8.0_65 open-jdk-like-memory-calculator=2.0.1_RELEASE spring-auto-reconfiguration=1.10.0_RELEASE",
 	  "after": null
 	},
 	{
@@ -195,13 +174,6 @@
 	  "operation": "REMOVED",
 	  "metric": "scope",
 	  "before": "CORE",
-	  "after": null
-	},
-	{
-	  "artifact": "h2o-model-catalog",
-	  "operation": "REMOVED",
-	  "metric": "space",
-	  "before": "d71cc2b3-b940-4454-b7c0-68b148466133",
 	  "after": null
 	},
 	{

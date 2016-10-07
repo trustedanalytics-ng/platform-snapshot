@@ -1,0 +1,98 @@
+[
+  {
+    "metadata": {
+      "guid": "5b677947-3c71-485d-441d-0f74ce7f8cb8"
+    },
+    "entity": {
+      "service_plans": [
+        {
+          "metadata": {
+            "guid": "63359718-5d75-438a-6830-cd25353632ae"
+          },
+          "entity": {
+            "metadata": {
+              "guid": ""
+            },
+            "service_instances_url": "",
+            "service": "",
+            "service_url": "",
+            "name": "free",
+            "free": true,
+            "description": "free",
+            "service_guid": "5b677947-3c71-485d-441d-0f74ce7f8cb8",
+            "extra": "",
+            "unique_id": "63359718-5d75-438a-6830-cd25353632ae",
+            "public": true,
+            "active": true
+          }
+        }
+      ],
+      "state": "READY",
+      "service_plans_url": "",
+      "active": true,
+      "info_url": "",
+      "version": "",
+      "long_Description": "",
+      "description": "Redis 3.0 service for application development and testing",
+      "url": "",
+      "provider": "",
+      "label": "redis28",
+      "bindable": true,
+      "unique_id": "5b677947-3c71-485d-441d-0f74ce7f8cb8",
+      "extra": "",
+      "tags": null,
+      "requires": null,
+      "documentation_url": "",
+      "service_broker_guid": "",
+      "plan_updateable": true
+    }
+  },
+  {
+    "metadata": {
+      "guid": "2084b556-f92d-4f2a-4008-9c31ad723377"
+    },
+    "entity": {
+      "service_plans": [
+        {
+          "metadata": {
+            "guid": "0682b744-f532-4eef-4cb1-89880500cce4"
+          },
+          "entity": {
+            "metadata": {
+              "guid": ""
+            },
+            "service_instances_url": "",
+            "service": "",
+            "service_url": "",
+            "name": "free",
+            "free": true,
+            "description": "free",
+            "service_guid": "2084b556-f92d-4f2a-4008-9c31ad723377",
+            "extra": "",
+            "unique_id": "0682b744-f532-4eef-4cb1-89880500cce4",
+            "public": true,
+            "active": true
+          }
+        }
+      ],
+      "state": "READY",
+      "service_plans_url": "",
+      "active": true,
+      "info_url": "",
+      "version": "",
+      "long_Description": "",
+      "description": "InfluxDB service for application development and testing",
+      "url": "",
+      "provider": "",
+      "label": "influxdb088",
+      "bindable": true,
+      "unique_id": "2084b556-f92d-4f2a-4008-9c31ad723377",
+      "extra": "",
+      "tags": null,
+      "requires": null,
+      "documentation_url": "",
+      "service_broker_guid": "",
+      "plan_updateable": true
+    }
+  }
+]

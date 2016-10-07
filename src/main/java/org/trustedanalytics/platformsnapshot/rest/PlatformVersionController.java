@@ -18,6 +18,7 @@ package org.trustedanalytics.platformsnapshot.rest;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
+import org.springframework.context.annotation.Profile;
 import org.trustedanalytics.platformsnapshot.model.PlatformVersion;
 import org.trustedanalytics.platformsnapshot.service.PlatformVersionSupplier;
 
@@ -30,6 +31,7 @@ import java.util.Objects;
 import io.swagger.annotations.ApiOperation;
 
 @RestController
+@Profile("cloud")
 public class PlatformVersionController {
     private final PlatformVersionSupplier supplier;
 

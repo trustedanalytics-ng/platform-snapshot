@@ -17,12 +17,9 @@ package org.trustedanalytics.platformsnapshot.client.entity;
 
 import lombok.Data;
 
-import java.time.LocalDateTime;
-import java.util.UUID;
-
 @Data
-public class CfMetadata {
-    private LocalDateTime updatedAt;
-    private LocalDateTime createdAt;
-    private UUID guid;
+public class TapServiceEntity {
+
+    private String label;
+    private String description;
 }

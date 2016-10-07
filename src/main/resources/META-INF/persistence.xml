@@ -7,8 +7,8 @@
         <provider>org.apache.openjpa.persistence.PersistenceProviderImpl</provider>
         <class>org.trustedanalytics.platformsnapshot.model.PlatformSnapshot</class>
         <class>org.trustedanalytics.platformsnapshot.model.CdhServiceArtifact</class>
-        <class>org.trustedanalytics.platformsnapshot.model.CfApplicationArtifact</class>
-        <class>org.trustedanalytics.platformsnapshot.model.CfServiceArtifact</class>
+        <class>org.trustedanalytics.platformsnapshot.model.TapApplicationArtifact</class>
+        <class>org.trustedanalytics.platformsnapshot.model.TapServiceArtifact</class>
 
         <properties>
             <property name="openjpa.Log" value="DefaultLevel=WARN, Runtime=INFO, Tool=INFO, SQL=TRACE"/>

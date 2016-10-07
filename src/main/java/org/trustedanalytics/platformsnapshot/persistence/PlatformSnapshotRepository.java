@@ -41,7 +41,7 @@ public interface PlatformSnapshotRepository extends CrudRepository<PlatformSnaps
 
     @Modifying
     @Transactional
-    @Query("delete from CfApplicationArtifact a where a.snapshot.createdAt <= ?1")
+    @Query("delete from TapApplicationArtifact a where a.snapshot.createdAt <= ?1")
     void deleteApplicationArtifacts(Date date);
 
     @Modifying
@@ -51,6 +51,6 @@ public interface PlatformSnapshotRepository extends CrudRepository<PlatformSnaps
 
     @Modifying
     @Transactional
-    @Query("delete from CfServiceArtifact s where s.snapshot.createdAt <= ?1")
+    @Query("delete from TapServiceArtifact s where s.snapshot.createdAt <= ?1")
     void deleteCfServiceArtifact(Date date);
 }

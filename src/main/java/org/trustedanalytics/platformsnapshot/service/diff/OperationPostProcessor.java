@@ -16,8 +16,8 @@
 package org.trustedanalytics.platformsnapshot.service.diff;
 
 import org.trustedanalytics.platformsnapshot.model.CdhServiceArtifact;
-import org.trustedanalytics.platformsnapshot.model.CfApplicationArtifact;
-import org.trustedanalytics.platformsnapshot.model.CfServiceArtifact;
+import org.trustedanalytics.platformsnapshot.model.TapApplicationArtifact;
+import org.trustedanalytics.platformsnapshot.model.TapServiceArtifact;
 import org.trustedanalytics.platformsnapshot.model.PlatformSnapshotDiffEntry;
 
 import com.google.common.collect.ImmutableSet;
@@ -43,7 +43,7 @@ import de.danielbechler.diff.node.DiffNode.State;
  * service name.
  */
 public class OperationPostProcessor implements DiffPostProcessor {
-    private static final Set<Class<?>> CF_ARTIFACTS = ImmutableSet.of(CfApplicationArtifact.class, CfServiceArtifact.class);
+    private static final Set<Class<?>> TAP_ARTIFACTS = ImmutableSet.of(TapApplicationArtifact.class, TapServiceArtifact.class);
     private static final Set<Class<?>> CDH_ARTIFACTS = ImmutableSet.of(CdhServiceArtifact.class);
 
     @Override
@@ -63,7 +63,7 @@ public class OperationPostProcessor implements DiffPostProcessor {
 
     private boolean isComponentAdded(List<PlatformSnapshotDiffEntry> componentDiff) {
         return componentDiff.stream()
-            .filter(c -> isCloudFoundryComponentId(c) || isHadoopComponentId(c))
+            .filter(c -> isK8SComponentId(c) || isHadoopComponentId(c))
             .filter(c -> c.getBefore() == null)
             .filter(c -> c.getAfter() != null)
             .findAny()
@@ -72,15 +72,15 @@ public class OperationPostProcessor implements DiffPostProcessor {
 
     private boolean isComponentRemoved(List<PlatformSnapshotDiffEntry> componentDiff) {
         return componentDiff.stream()
-            .filter(c -> isCloudFoundryComponentId(c) || isHadoopComponentId(c))
+            .filter(c -> isK8SComponentId(c) || isHadoopComponentId(c))
             .filter(c -> c.getBefore() != null)
             .filter(c -> c.getAfter() == null)
             .findAny()
             .isPresent();
     }
 
-    private boolean isCloudFoundryComponentId(PlatformSnapshotDiffEntry diff) {
-        return CF_ARTIFACTS.contains(diff.getType()) && "guid".equalsIgnoreCase(diff.getMetric());
+    private boolean isK8SComponentId(PlatformSnapshotDiffEntry diff) {
+        return TAP_ARTIFACTS.contains(diff.getType()) && "guid".equalsIgnoreCase(diff.getMetric());
     }
 
     private boolean isHadoopComponentId(PlatformSnapshotDiffEntry diff) {

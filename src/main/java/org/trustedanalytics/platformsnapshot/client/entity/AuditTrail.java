@@ -15,13 +15,19 @@
  */
 package org.trustedanalytics.platformsnapshot.client.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
-import java.util.UUID;
-
 @Data
-public class CfSpaceEntity {
+public class AuditTrail {
 
-    private String name;
-    private UUID organizationGuid;
+    @JsonProperty("lastUpdateBy")
+    private String lastUpdateBy;
+    @JsonProperty("lastUpdatedOn")
+    private long lastUpdatedOn;
+    @JsonProperty("createdBy")
+    private String createdBy;
+    @JsonProperty("createdOn")
+    private long createdOn;
+
 }

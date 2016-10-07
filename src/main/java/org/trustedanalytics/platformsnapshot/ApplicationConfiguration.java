@@ -18,35 +18,28 @@ package org.trustedanalytics.platformsnapshot;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
-import feign.Feign;
 import feign.Logger;
-import feign.Request;
-import feign.jackson.JacksonDecoder;
-import feign.jackson.JacksonEncoder;
-import feign.slf4j.Slf4jLogger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.oauth2.client.resource.OAuth2ProtectedResourceDetails;
 import org.springframework.security.oauth2.client.token.grant.client.ClientCredentialsResourceDetails;
-import org.trustedanalytics.platformsnapshot.client.CfOperations;
-import org.trustedanalytics.platformsnapshot.client.CfRxClient;
+import org.trustedanalytics.platformsnapshot.client.TapOperations;
+import org.trustedanalytics.platformsnapshot.client.TapRxClient;
 import org.trustedanalytics.platformsnapshot.client.LocalDateTimeDeserializer;
-import org.trustedanalytics.platformsnapshot.client.PlatformContextOperations;
 import org.trustedanalytics.platformsnapshot.client.uaa.CachedUaaOperations;
 import org.trustedanalytics.platformsnapshot.client.uaa.OAuth2PrivilegedInterceptor;
 import org.trustedanalytics.platformsnapshot.client.uaa.UaaOperations;
 import org.trustedanalytics.platformsnapshot.security.OAuth2TokenSupplier;
 
 @Configuration
+@Profile("cloud")
 public class ApplicationConfiguration {
 
-    @Value("${services.platform-context}")
-    private String platformContextUrl;
-
-    @Value("${spring.oauth2.resource.api}")
-    private String cfApiUrl;
+    @Value("${api.service}")
+    private String tapApiUrl;
 
     @Bean
     public OAuth2TokenSupplier oAuth2TokenSupplier() {
@@ -66,18 +59,6 @@ public class ApplicationConfiguration {
     }
 
     @Bean
-    public PlatformContextOperations platformContextOperations(OAuth2PrivilegedInterceptor oAuth2PrivilegedInterceptor) {
-        return Feign.builder()
-                    .encoder(new JacksonEncoder(objectMapper()))
-                    .decoder(new JacksonDecoder(objectMapper()))
-                    .logger(new Slf4jLogger(PlatformContextOperations.class))
-                    .options(new Request.Options(30_1000, 10_1000))
-                    .requestInterceptor(oAuth2PrivilegedInterceptor)
-                    .logLevel(Logger.Level.BASIC)
-                    .target(PlatformContextOperations.class, platformContextUrl);
-    }
-
-    @Bean
     public ObjectMapper objectMapper() {
         return new ObjectMapper()
             .setPropertyNamingStrategy(new PropertyNamingStrategy.LowerCaseWithUnderscoresStrategy())
@@ -85,10 +66,10 @@ public class ApplicationConfiguration {
     }
 
     @Bean
-    public CfOperations cfRxClient(OAuth2PrivilegedInterceptor oauth2PrivilegedInterceptor) {
-        return new CfRxClient(builder -> builder
+    public TapOperations tapRxClient(OAuth2PrivilegedInterceptor oauth2PrivilegedInterceptor) {
+        return new TapRxClient(builder -> builder
             .requestInterceptor(oauth2PrivilegedInterceptor)
-            .logLevel(Logger.Level.BASIC), cfApiUrl);
+            .logLevel(Logger.Level.BASIC), tapApiUrl);
     }
 
     @Bean

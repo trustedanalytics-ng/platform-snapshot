@@ -13,22 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.trustedanalytics.platformsnapshot.model;
+package org.trustedanalytics.platformsnapshot.client.entity;
 
-import java.io.Serializable;
+import lombok.Data;
+
+import java.time.LocalDateTime;
 import java.util.UUID;
 
-public enum Scope implements Serializable{
-    CORE,
-    DEMO,
-    OTHER,
-    ALL;
-
-    public static Scope resolve(UUID core, UUID org) {
-        if(org.equals(core)) {
-            return Scope.CORE;
-        }
-        return Scope.OTHER;
-    }
-
+@Data
+public class TapMetadata {
+    private LocalDateTime updatedAt;
+    private LocalDateTime createdAt;
+    private String guid;
 }

@@ -15,34 +15,28 @@
  */
 package org.trustedanalytics.platformsnapshot.client.decoder;
 
-import org.trustedanalytics.platformsnapshot.client.CfOperations;
-import org.trustedanalytics.platformsnapshot.client.entity.CfPage;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.RuntimeJsonMappingException;
-
 import feign.Response;
 import feign.codec.Decoder;
+import rx.Observable;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
-import rx.Observable;
-
-public class CcRxDecoder implements Decoder {
+public class TapRxDecoder implements Decoder {
     private static final int BUFFER_SIZE = 32;
-    private final CfOperations client;
-    private final CcRxPageResolver resolver;
     private final ObjectMapper mapper;
 
-    public CcRxDecoder(CfOperations client, ObjectMapper mapper) {
-        this.client = Objects.requireNonNull(client, "client");
+    public TapRxDecoder(ObjectMapper mapper) {
         this.mapper = Objects.requireNonNull(mapper, "mapper");
-        this.resolver = new CcRxPageResolver();
     }
 
     @Override
@@ -64,8 +58,8 @@ public class CcRxDecoder implements Decoder {
 
             reader.reset();
             final ParameterizedType parameterizedType = (ParameterizedType) type;
-            if (new String(buffer).contains("total_results")) {
-                return concatPages(mapper.readValue(reader, mapper.constructType(toPageType(parameterizedType))));
+            if (new String(buffer).startsWith("[")) {
+                return listToObservable(mapper.readValue(reader, mapper.constructType(toListType(parameterizedType))));
             } else {
                 return Observable.just(mapper.readValue(reader, mapper.constructType(toScalarType(parameterizedType))));
             }
@@ -78,17 +72,12 @@ public class CcRxDecoder implements Decoder {
     }
 
     @SuppressWarnings("unchecked")
-    private <T> Observable<T> concatPages(CfPage<T> cfPage) {
-        final Observable<T> resources = Observable.from(cfPage.getResources());
-
-        if (cfPage.getNextUrl() != null) {
-            return resources.concatWith(Observable.defer(() -> (Observable<T>) resolver.apply(cfPage.getNextUrl(), client)));
-        } else {
-            return resources;
-        }
+    private <T> Observable<T> listToObservable(List<T> list) {
+        final Observable<T> resources = Observable.from(list);
+        return resources;
     }
 
-    private Type toPageType(ParameterizedType type) {
+    private Type toListType(ParameterizedType type) {
         return new ParameterizedType() {
             @Override
             public Type[] getActualTypeArguments() {
@@ -97,7 +86,7 @@ public class CcRxDecoder implements Decoder {
 
             @Override
             public Type getRawType() {
-                return CfPage.class;
+                return ArrayList.class;
             }
 
             @Override

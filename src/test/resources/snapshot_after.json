@@ -1,5 +1,5 @@
 {
-  "cf_services": [
+  "tap_services": [
     {
       "guid": "41ab212c-c0d8-4b58-8d8d-77da6541f653",
       "created_at": 1468209617000,
@@ -1410,7 +1410,7 @@
       "health_check_type": "port"
     }
   ],
-  "cf_version": "2.41.0",
+  "k8s_version": "2.41.0",
   "cdh_version": "5.5.1",
   "created_at": 1468349862034,
   "platform_version": "0.8.0",

@@ -15,6 +15,7 @@
  */
 package org.trustedanalytics.platformsnapshot;
 
+import org.springframework.context.annotation.Profile;
 import org.trustedanalytics.platformsnapshot.security.AdminInterceptor;
 import org.trustedanalytics.platformsnapshot.security.OAuth2TokenSupplier;
 
@@ -24,6 +25,7 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 @Configuration
+@Profile("cloud")
 public class WebApplicationConfiguration extends WebMvcConfigurerAdapter {
     @Autowired
     OAuth2TokenSupplier tokenSupplier;

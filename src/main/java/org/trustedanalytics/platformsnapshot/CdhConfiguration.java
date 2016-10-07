@@ -31,11 +31,13 @@ import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.trustedanalytics.platformsnapshot.client.cdh.CdhOperations;
 
 import javax.validation.constraints.NotNull;
 
 @Configuration
+@Profile("cloud")
 public class CdhConfiguration {
 
     @Value("${cloudera.user}")
@@ -68,9 +70,9 @@ public class CdhConfiguration {
             .encoder(new JacksonEncoder(objectMapper))
             .decoder(new JacksonDecoder(objectMapper))
             .logger(new Slf4jLogger(CdhOperations.class))
-            .options(new Request.Options(30_1000, 10_1000))
             .requestInterceptor(new BasicAuthRequestInterceptor(user, password))
-            .logLevel(Logger.Level.BASIC)
-            .target(CdhOperations.class, String.format("http://%s:%s", host, port));
+            .logLevel(Logger.Level.FULL)
+
+            .target(CdhOperations.class, String.format("https://%s:%s", host, port));
     }
 }

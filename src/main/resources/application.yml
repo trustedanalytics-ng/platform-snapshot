@@ -14,15 +14,12 @@ spring.oauth2:
     clientSecret: ${vcap.services.sso.credentials.clientSecret}
 
   resource:
-    id: cloud_controller
+    id: tap
     jwt:
       keyUri: ${vcap.services.sso.credentials.tokenKey}
     userInfoUri: ${vcap.services.sso.credentials.userInfoUri}
-    api: ${vcap.services.sso.credentials.apiEndpoint}
   check_token: ${vcap.services.sso.credentials.checkTokenUri}
 uaaUri: ${vcap.services.sso.credentials.uaaUri}
-services:
-  platform-context: ${vcap.services.platformcontext.credentials.host}
 
 logging:
   level:
@@ -38,9 +35,9 @@ spring.datasource: platform=postgres
 spring.jpa.show-sql: true
 spring.jpa.hibernate.ddl-auto: ""
 spring.database.driverClassName: org.postgresql.Driver
-spring.datasource.url: jdbc:postgresql://${vcap.services.platform-snapshot-db.credentials.hostname}:${vcap.services.platform-snapshot-db.credentials.port}/${vcap.services.platform-snapshot-db.credentials.dbname}
-spring.datasource.username: ${vcap.services.platform-snapshot-db.username}
-spring.datasource.password: ${vcap.services.platform-snapshot-db.credentials.password}
+spring.datasource.url: jdbc:postgresql://${db.hostname}:${db.port}/${db.name}
+spring.datasource.username: ${db.username}
+spring.datasource.password: ${db.password}
 
 ---
 
@@ -51,11 +48,6 @@ server.port: 8080
 
 security:
   ignored: /rest/**,/rest/test,/console/**,/console,/test,/**,/*.js,/sdoc.jsp,/api-docs,/api-docs/default/*,/images/*,/lib/*,/css/*,/v2/api-docs
-
-
-
-services:
-  platform-context: ${vcap.services.platformcontext.credentials.host}
 
 logging:
   level:

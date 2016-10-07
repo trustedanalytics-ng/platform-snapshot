@@ -18,8 +18,7 @@ package org.trustedanalytics.platformsnapshot.client.entity;
 import lombok.Data;
 
 @Data
-public class CfApplication {
-
-    private CfApplicationEntity entity;
-    private CfMetadata metadata;
+public class TapOrganization {
+    private TapMetadata metadata;
+    private TapOrganizationEntity entity;
 }

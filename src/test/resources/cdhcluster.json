@@ -1,0 +1,13 @@
+{
+  "items" : [ {
+    "name" : "CDH-cluster",
+    "displayName" : "CDH-cluster",
+    "version" : "CDH5",
+    "fullVersion" : "5.7.1",
+    "maintenanceMode" : false,
+    "maintenanceOwners" : [ ],
+    "clusterUrl" : "http://manager.cdh.cluster.local:7180/cmf/clusterRedirect/CDH-cluster",
+    "hostsUrl" : "http://manager.cdh.cluster.local:7180/cmf/clusterRedirect/CDH-cluster/hosts",
+    "entityStatus" : "CONCERNING_HEALTH"
+  } ]
+}

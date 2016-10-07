@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <artifactId>platform-snapshot</artifactId>
-    <version>0.5.14</version>
+    <version>0.6.0</version>
 
     <parent>
         <groupId>org.trustedanalytics</groupId>
@@ -16,6 +16,8 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <docker.imageName>${project.artifactId}</docker.imageName>
+        <docker.registry>tapimages.us.enableiot.com:8080</docker.registry>
     </properties>
 
     <dependencies>
@@ -49,6 +51,22 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.github.tomakehurst</groupId>
+            <artifactId>wiremock</artifactId>
+            <version>1.57</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.opentable.components/otj-pg-embedded -->
+        <dependency>
+            <groupId>com.opentable.components</groupId>
+            <artifactId>otj-pg-embedded</artifactId>
+            <version>0.3.0</version>
+            <scope>test</scope>
+        </dependency>
+
+
         <!-- Utils -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -124,6 +142,35 @@
         </dependency>
     </dependencies>
 
+    <profiles>
+        <profile>
+            <id>integration-test</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>build-helper-maven-plugin</artifactId>
+                        <version>1.9.1</version>
+                        <executions>
+                            <execution>
+                                <id>add-test-source</id>
+                                <phase>process-resources</phase>
+                                <goals>
+                                    <goal>add-test-source</goal>
+                                </goals>
+                                <configuration>
+                                    <sources>
+                                        <source>src/integration-test/java</source>
+                                    </sources>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
     <build>
         <resources>
             <resource>
@@ -159,7 +206,6 @@
                     <dependency>
                         <groupId>org.apache.openjpa</groupId>
                         <artifactId>openjpa</artifactId>
-
                         <version>2.4.1</version>
                     </dependency>
                 </dependencies>
@@ -187,8 +233,48 @@
                     </arguments>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>com.spotify</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <version>0.4.12</version>
+                <configuration>
+                    <imageName>${docker.imageName}</imageName>
+                    <baseImage>${docker.registry}/tap-base-java:java8-jessie</baseImage>
+                    <cmd>java $JAVA_OPTS -jar ${project.build.finalName}.jar</cmd>
+                    <resources>
+                        <resource>
+                            <targetPath>/</targetPath>
+                            <directory>${project.build.directory}</directory>
+                            <include>${project.build.finalName}.jar</include>
+                        </resource>
+                    </resources>
+                    <env>
+                        <PORT>8080</PORT>
+                        <JAVA_OPTS>-Xss228k -Xmx512m -XX:MetaspaceSize=128m</JAVA_OPTS>
+                        <VERSION>${project.artifactId}-${project.version}</VERSION>
+                    </env>
+                    <useConfigFile>true</useConfigFile>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-invoker-plugin</artifactId>
+
+                <configuration>
+                    <cloneProjectsTo>${project.build.directory}/integration-test</cloneProjectsTo>
+                    <settingsFile>src/integration-tests/settings.xml</settingsFile>
+                    <localRepositoryPath>${project.build.directory}/local-repo</localRepositoryPath>
+                    <postBuildHookScript>verify</postBuildHookScript> <!-- no extension required -->
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>integration-test</id>
+                        <goals>
+                            <goal>install</goal>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
-
-
 </project>

@@ -1,9 +1,4 @@
-{
-  "total_results": 1,
-  "total_pages": 1,
-  "prev_url": null,
-  "next_url": null,
-  "resources": [
+[
     {
       "metadata": {
         "guid": "9b213bd9-a54f-4f41-abb4-dd12e7e50814",
@@ -36,4 +31,3 @@
       }
     }
   ]
-}

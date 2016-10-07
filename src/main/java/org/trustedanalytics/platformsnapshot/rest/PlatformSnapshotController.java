@@ -18,10 +18,12 @@ package org.trustedanalytics.platformsnapshot.rest;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
-import org.trustedanalytics.platformsnapshot.model.PlatformSnapshotConfiguration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import org.springframework.context.annotation.Profile;
 import org.trustedanalytics.platformsnapshot.model.PlatformSnapshot;
 import org.trustedanalytics.platformsnapshot.model.PlatformSnapshotDiff;
-import org.trustedanalytics.platformsnapshot.model.Scope;
 import org.trustedanalytics.platformsnapshot.persistence.PlatformSnapshotRepository;
 import org.trustedanalytics.platformsnapshot.persistence.PlatformSnapshotTransactions;
 import org.trustedanalytics.platformsnapshot.service.PlatformSnapshotDiffService;
@@ -36,7 +38,6 @@ import org.springframework.web.bind.annotation.RestController;
 import java.sql.Date;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -44,7 +45,11 @@ import java.util.stream.Collectors;
 import io.swagger.annotations.ApiOperation;
 
 @RestController
+@Profile("cloud")
 public class PlatformSnapshotController {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(PlatformSnapshotController.class);
+
     private final PlatformSnapshotRepository platformSnapshotRepository;
     private final PlatformSnapshotScheduler platformSnapshotScheduler;
     private final PlatformSnapshotTransactions platformSnapshotTransactions;
@@ -68,16 +73,16 @@ public class PlatformSnapshotController {
     @RequestMapping(value = "/rest/v1/snapshots", method = GET, produces = APPLICATION_JSON_VALUE)
     public Collection<PlatformSnapshot> getPlatformSnapshot(
         @RequestParam("from") Optional<LocalDateTime> fromDate,
-        @RequestParam("to") Optional<LocalDateTime> toDate,
-        @RequestParam("scope") Optional<Scope> scope) {
+        @RequestParam("to") Optional<LocalDateTime> toDate) {
 
         final LocalDateTime from = fromDate.orElse(LocalDateTime.now().minusDays(7));
         final LocalDateTime to = toDate.orElse(LocalDateTime.now());
 
+        LOGGER.info("Fetching snapshots");
+
         return platformSnapshotRepository.findByDates(Date.from(from.toInstant(ZoneOffset.UTC)), Date
             .from(to.toInstant(ZoneOffset.UTC)))
             .stream()
-            .map(snapshot -> snapshot.filter(scope.orElse(Scope.ALL)))
             .collect(Collectors.toList());
     }
 
@@ -95,20 +100,11 @@ public class PlatformSnapshotController {
         notes = "Privilege level: Consumer of this endpoint must be an admin."
     )
     @RequestMapping(value = "/rest/v1/snapshots/trigger", method = GET, produces = APPLICATION_JSON_VALUE)
-    public void triggerPlatformSnapshot() {
+    public void triggerPlatformSnapshot()
+    {
+        LOGGER.info("Triggering snapshot");
         platformSnapshotScheduler.trigger();
-    }
 
-    @ApiOperation(
-        value = "Get platform snapshot configuration",
-        notes = "Privilege level: Consumer of this endpoint must be an user."
-    )
-    @RequestMapping(value = "/rest/v1/configuration", method = GET, produces = APPLICATION_JSON_VALUE)
-    public PlatformSnapshotConfiguration getPlatformConfiguration() {
-        return new PlatformSnapshotConfiguration(Arrays.asList(Scope.values())
-            .stream()
-            .map(Enum::name)
-            .collect(Collectors.toList()));
     }
 
     @ApiOperation(
