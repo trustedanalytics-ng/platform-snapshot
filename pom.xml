@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <artifactId>platform-snapshot</artifactId>
-    <version>0.6.0</version>
+    <version>0.6.1</version>
 
     <parent>
         <groupId>org.trustedanalytics</groupId>
@@ -18,6 +18,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <docker.imageName>${project.artifactId}</docker.imageName>
         <docker.registry>tapimages.us.enableiot.com:8080</docker.registry>
+        <openfeign.version>9.3.1</openfeign.version>
     </properties>
 
     <dependencies>
@@ -124,6 +125,29 @@
         </dependency>
         <!-- feign -->
         <dependency>
+            <groupId>io.github.openfeign</groupId>
+            <artifactId>feign-core</artifactId>
+            <version>${openfeign.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.openfeign</groupId>
+            <artifactId>feign-jackson</artifactId>
+            <version>${openfeign.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.openfeign</groupId>
+            <artifactId>feign-slf4j</artifactId>
+            <version>${openfeign.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.5.2</version>
+        </dependency>
+
+        <!--
+        <dependency>
             <groupId>com.netflix.feign</groupId>
             <artifactId>feign-core</artifactId>
         </dependency>
@@ -135,6 +159,7 @@
             <groupId>com.netflix.feign</groupId>
             <artifactId>feign-slf4j</artifactId>
         </dependency>
+        -->
         <dependency>
             <groupId>de.danielbechler</groupId>
             <artifactId>java-object-diff</artifactId>
@@ -213,25 +238,6 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                        <phase>package</phase>
-                    </execution>
-                </executions>
-                <configuration>
-                    <executable>cp</executable>
-                    <arguments>
-                        <argument>target/classes/manifest.yml</argument>
-                        <argument>manifest.yml</argument>
-                    </arguments>
-                </configuration>
             </plugin>
             <plugin>
                 <groupId>com.spotify</groupId>

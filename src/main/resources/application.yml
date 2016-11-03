@@ -26,6 +26,10 @@ logging:
     org.springframework.security: DEBUG
     org.trustedanalytics: DEBUG
 
+cloudera:
+  store: ${cloudera.truststore:}
+  storePassword: ${cloudera.truststore.password:}
+
 
 endpoints.enabled: false
 endpoints.health.enabled: true

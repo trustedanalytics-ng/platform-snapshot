@@ -42,6 +42,8 @@ import org.trustedanalytics.platformsnapshot.model.PlatformSnapshot;
 import org.trustedanalytics.platformsnapshot.persistence.PlatformSnapshotRepository;
 import org.trustedanalytics.platformsnapshot.service.PlatformSnapshotScheduler;
 
+import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
+import java.util.Properties;
 import javax.sql.DataSource;
 import javax.transaction.Transactional;
 import java.io.IOException;
@@ -162,11 +164,33 @@ public class PlatformSnapshotSchedulerIntegrationTest {
     }
 
     public static class PostgresTestConfiguration {
+        private static final String DUMMY = "dummy";
+        private static final String DUMMY_PORT = "1234";
+
         @Bean
         public DataSource getDataSource() {
             DataSource data =  pg.getEmbeddedPostgreSQL().getPostgresDatabase();
             return data;
         }
+
+        @Bean
+        public static PropertyPlaceholderConfigurer propertyPlaceholderConfigurer() {
+            PropertyPlaceholderConfigurer ppc = new PropertyPlaceholderConfigurer();
+            ppc.setIgnoreResourceNotFound(true);
+            final Properties properties = new Properties();
+
+            properties.setProperty("cloudera.user", DUMMY);
+            properties.setProperty("cloudera.password", DUMMY);
+            properties.setProperty("cloudera.address", DUMMY);
+            properties.setProperty("cloudera.port", DUMMY_PORT);
+            properties.setProperty("cloudera.store", DUMMY);
+            properties.setProperty("cloudera.storePassword", DUMMY);
+
+            ppc.setProperties(properties);
+            return ppc;
+        }
+
+
     }
 
     private String loadJson(String name) {

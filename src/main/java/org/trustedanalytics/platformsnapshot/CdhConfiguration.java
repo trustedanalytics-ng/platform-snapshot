@@ -17,62 +17,61 @@ package org.trustedanalytics.platformsnapshot;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
+import feign.Client;
 import feign.Feign;
 import feign.Logger;
-import feign.Request;
 import feign.auth.BasicAuthRequestInterceptor;
 import feign.jackson.JacksonDecoder;
 import feign.jackson.JacksonEncoder;
 import feign.slf4j.Slf4jLogger;
-
-import lombok.Getter;
-
-import org.springframework.beans.factory.annotation.Value;
+import org.apache.http.conn.ssl.SSLContexts;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.trustedanalytics.platformsnapshot.client.cdh.CdhOperations;
+import org.trustedanalytics.platformsnapshot.service.ClouderaConfiguration;
 
-import javax.validation.constraints.NotNull;
+import javax.net.SocketFactory;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocketFactory;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.security.GeneralSecurityException;
+import java.security.KeyStore;
 
 @Configuration
 @Profile("cloud")
 public class CdhConfiguration {
 
-    @Value("${cloudera.user}")
-    @NotNull
-    @Getter
-    private String user;
-
-    @Value("${cloudera.password}")
-    @NotNull
-    @Getter
-    private String password;
-
-    @Value("${cloudera.address}")
-    @NotNull
-    @Getter
-    private String host;
-
-    @Value("${cloudera.port}")
-    @NotNull
-    @Getter
-    private Integer port;
-
     @Bean
-    public CdhOperations cdhOperations() {
+    public CdhOperations cdhOperations(SSLContext sslContext, ClouderaConfiguration clouderaConfiguration) {
 
         ObjectMapper objectMapper = new ObjectMapper()
             .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 
+        Client sslClient = new Client.Default((SSLSocketFactory)SSLSocketFactory.getDefault(),null);
+
         return Feign.builder()
             .encoder(new JacksonEncoder(objectMapper))
-            .decoder(new JacksonDecoder(objectMapper))
-            .logger(new Slf4jLogger(CdhOperations.class))
-            .requestInterceptor(new BasicAuthRequestInterceptor(user, password))
-            .logLevel(Logger.Level.FULL)
+                .decoder(new JacksonDecoder(objectMapper))
+                .logger(new Slf4jLogger(CdhOperations.class))
+                .requestInterceptor(new BasicAuthRequestInterceptor(clouderaConfiguration.getUser(), clouderaConfiguration.getPassword()))
+                .client(sslClient)
+                .logLevel(Logger.Level.FULL)
+                .target(CdhOperations.class, String.format("https://%s:%s", clouderaConfiguration.getHost(), clouderaConfiguration.getPort()));
+    }
 
-            .target(CdhOperations.class, String.format("https://%s:%s", host, port));
+    @Bean
+    public SSLContext getSSLContext(ClouderaConfiguration clouderaConfiguration) throws IOException, GeneralSecurityException {
+        if (clouderaConfiguration == null) {
+            throw new IllegalStateException("Empty cloudera configuration");
+        }
+        KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
+        try (FileInputStream fis = new FileInputStream(clouderaConfiguration.getStore())) {
+            ks.load(fis, clouderaConfiguration.getStorePassword().toCharArray());
+        }
+        SSLContext sslContext =  SSLContexts.custom().loadTrustMaterial(ks).build();
+        SSLContext.setDefault(sslContext);
+        return sslContext;
     }
 }
