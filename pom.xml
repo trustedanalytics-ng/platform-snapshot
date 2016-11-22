@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <artifactId>platform-snapshot</artifactId>
-    <version>0.6.1</version>
+    <version>0.6.2</version>
 
     <parent>
         <groupId>org.trustedanalytics</groupId>
@@ -19,6 +19,10 @@
         <docker.imageName>${project.artifactId}</docker.imageName>
         <docker.registry>tapimages.us.enableiot.com:8080</docker.registry>
         <openfeign.version>9.3.1</openfeign.version>
+        <jacoco-measurement-instructions>0.316</jacoco-measurement-instructions>
+        <jacoco-measurement-branches>0.140</jacoco-measurement-branches>
+        <jacoco-measurement-lines>0.610</jacoco-measurement-lines>
+        <jacoco-measurement-classes>0.561</jacoco-measurement-classes>
     </properties>
 
     <dependencies>
@@ -208,6 +212,30 @@
             </resource>
         </resources>
         <plugins>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.7.4.201502262128</version>
+                <configuration>
+                    <destFile>${basedir}/target/coverage-reports/jacoco-unit.exec</destFile>
+                    <dataFile>${basedir}/target/coverage-reports/jacoco-unit.exec</dataFile>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>jacoco-initialize</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>jacoco-site</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
 
             <plugin>
                 <groupId>org.apache.openjpa</groupId>
