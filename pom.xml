@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <artifactId>platform-snapshot</artifactId>
-    <version>0.6.5</version>
+    <version>0.6.6</version>
 
     <parent>
         <groupId>org.trustedanalytics</groupId>
@@ -18,10 +18,10 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <docker.imageName>${project.artifactId}</docker.imageName>
         <openfeign.version>9.3.1</openfeign.version>
-        <jacoco-measurement-instructions>0.316</jacoco-measurement-instructions>
-        <jacoco-measurement-branches>0.140</jacoco-measurement-branches>
-        <jacoco-measurement-lines>0.609</jacoco-measurement-lines>
-        <jacoco-measurement-classes>0.561</jacoco-measurement-classes>
+        <jacoco-measurement-instructions>0.3220</jacoco-measurement-instructions>
+        <jacoco-measurement-branches>0.1448</jacoco-measurement-branches>
+        <jacoco-measurement-lines>0.6156</jacoco-measurement-lines>
+        <jacoco-measurement-classes>0.5740</jacoco-measurement-classes>
     </properties>
 
     <dependencies>
@@ -148,21 +148,6 @@
             <artifactId>httpclient</artifactId>
             <version>4.5.2</version>
         </dependency>
-
-        <!--
-        <dependency>
-            <groupId>com.netflix.feign</groupId>
-            <artifactId>feign-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.netflix.feign</groupId>
-            <artifactId>feign-jackson</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.netflix.feign</groupId>
-            <artifactId>feign-slf4j</artifactId>
-        </dependency>
-        -->
         <dependency>
             <groupId>de.danielbechler</groupId>
             <artifactId>java-object-diff</artifactId>

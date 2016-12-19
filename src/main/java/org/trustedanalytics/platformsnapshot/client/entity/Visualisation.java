@@ -13,13 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.trustedanalytics.platformsnapshot.client.entity;
 
 import lombok.Data;
 
 @Data
-public class MetadataEntry {
-
-    private String key;
-    private String value;
+public class Visualisation {
+    String name;
+    String url;
+    Boolean available;
 }

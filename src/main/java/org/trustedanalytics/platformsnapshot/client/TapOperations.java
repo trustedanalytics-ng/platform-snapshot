@@ -26,21 +26,15 @@ import java.net.URI;
 @Headers("Content-Type: application/json")
 public interface TapOperations {
 
-    @RequestLine("GET /v1/applications")
+    @RequestLine("GET /v3/applications")
     Observable<TapApplication> getApplications();
 
-    @RequestLine("GET")
-    Observable<TapApplication> getApplications(URI uri);
-
-    @RequestLine("GET /v2/organizations?q={orgName}")
-    Observable<TapOrganization> getOrganization(@Param("orgName") String orgName);
-
-    @RequestLine("GET /v1/catalog")
+    @RequestLine("GET /v3/offerings")
     Observable<TapService> getServices();
 
     @RequestLine("GET")
     Observable<TapService> getServices(URI uri);
 
-    @RequestLine("GET /v1/platform_info")
+    @RequestLine("GET /v3/platform_info")
     Observable<TapInfo> getTapInfo();
 }

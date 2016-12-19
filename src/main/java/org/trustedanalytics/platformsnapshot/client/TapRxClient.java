@@ -58,19 +58,7 @@ public class TapRxClient implements TapOperations {
     }
 
     @Override
-    public Observable<TapApplication> getApplications() {
-        return tapOperations.getApplications();
-    }
-
-    @Override
-    public Observable<TapApplication> getApplications(URI uri) {
-        return tapOperations.getApplications(uri);
-    }
-
-    @Override
-    public Observable<TapOrganization> getOrganization(String orgName) {
-        return tapOperations.getOrganization(orgName);
-    }
+    public Observable<TapApplication> getApplications() { return tapOperations.getApplications(); }
 
     @Override
     public Observable<TapInfo> getTapInfo() {

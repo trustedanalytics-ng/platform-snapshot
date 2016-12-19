@@ -19,7 +19,7 @@ import lombok.Data;
 
 @Data
 public class TapService {
-
-    private TapServiceEntity entity;
-    private TapMetadata metadata;
+    private String name;
+    private String description;
+    private String id;
 }

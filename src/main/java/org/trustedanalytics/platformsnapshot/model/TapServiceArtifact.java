@@ -68,11 +68,11 @@ public class TapServiceArtifact implements Serializable {
 
     public TapServiceArtifact(TapService tapService) {
 
-            this.label = tapService.getEntity().getLabel();
-            this.description = tapService.getEntity().getDescription();
-            this.updatedAt = Optional.ofNullable(tapService.getMetadata().getUpdatedAt()).map(date -> Date.from(date.toInstant(ZoneOffset.UTC))).orElse(null);
-            this.createdAt = Optional.ofNullable(tapService.getMetadata().getCreatedAt()).map(date -> Date.from(date.toInstant(ZoneOffset.UTC))).orElse(null);
-            this.guid = tapService.getMetadata().getGuid().toString();
+            this.label = tapService.getName();
+            this.description = tapService.getDescription();
+            this.updatedAt = null;
+            this.createdAt = null;
+            this.guid = tapService.getId().toString();
             LOGGER.info("Creating service artifact: {} ", toString());
 
     }

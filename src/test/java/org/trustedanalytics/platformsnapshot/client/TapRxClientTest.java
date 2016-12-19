@@ -51,16 +51,16 @@ public class TapRxClientTest {
     @Test
     public void testGetServicesCatalog() throws IOException {
 
-        final String pageJson = loadJson("catalog.json");
+        final String pageJson = loadJson("v3offerings.json");
 
-        stubFor(get(urlPathEqualTo("/v1/catalog"))
+        stubFor(get(urlPathEqualTo("/v3/offerings"))
                 .willReturn(aResponse()
                         .withStatus(200)
                         .withHeader("Content-Type", "application/json")
                         .withBody(pageJson)));
         Observable<TapService>  services = client.getServices();
         TapService s = services.toBlocking().first();
-        assertEquals(s.getEntity().getLabel(), "redis28");
+        assertEquals(s.getName(), "gearpumpdashboard");
         LOGGER.info("Tap service {}", s);
 
     }
@@ -68,16 +68,16 @@ public class TapRxClientTest {
     @Test
     public void testGetInfo() throws IOException {
 
-        final String pageJson = loadJson("v1_info.json");
+        final String pageJson = loadJson("v3info.json");
 
-        stubFor(get(urlPathEqualTo("/v1/platform_info"))
+        stubFor(get(urlPathEqualTo("/v3/platform_info"))
                 .willReturn(aResponse()
                         .withStatus(200)
                         .withHeader("Content-Type", "application/json")
                         .withBody(pageJson)));
         Observable<TapInfo>  info = client.getTapInfo();
         TapInfo my_info = info.toBlocking().first();
-        assertEquals(my_info.getPlatformVersion(), "0.8.1388");
+        assertEquals(my_info.getPlatformVersion(), "0.8.0.2417");
         LOGGER.info("Tap service {}", my_info);
 
     }
@@ -87,7 +87,7 @@ public class TapRxClientTest {
 
         final String pageJson = loadJson("application.json");
 
-        stubFor(get(urlPathEqualTo("/v1/applications"))
+        stubFor(get(urlPathEqualTo("/v3/applications"))
                 .willReturn(aResponse()
                         .withStatus(200)
                         .withHeader("Content-Type", "application/json")

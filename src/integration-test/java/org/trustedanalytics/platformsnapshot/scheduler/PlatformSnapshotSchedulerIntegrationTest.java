@@ -117,17 +117,17 @@ public class PlatformSnapshotSchedulerIntegrationTest {
                         .withHeader("Content-Type", "application/json")
                         .withBody(cdhservices)));
 
-        final String pageJson = loadJson("catalog.json");
+        final String pageJson = loadJson("v3offerings.json");
 
-        stubFor(get(urlPathEqualTo("/v1/catalog"))
+        stubFor(get(urlPathEqualTo("/v3/offerings"))
                 .willReturn(aResponse()
                         .withStatus(200)
                         .withHeader("Content-Type", "application/json")
                         .withBody(pageJson)));
 
-        final String infoJson = loadJson("v1_info.json");
+        final String infoJson = loadJson("v3info.json");
 
-        stubFor(get(urlPathEqualTo("/v1/platform_info"))
+        stubFor(get(urlPathEqualTo("/v3/platform_info"))
                 .willReturn(aResponse()
                         .withStatus(200)
                         .withHeader("Content-Type", "application/json")
@@ -135,7 +135,7 @@ public class PlatformSnapshotSchedulerIntegrationTest {
 
         final String appsJson = loadJson("application.json");
 
-        stubFor(get(urlPathEqualTo("/v1/applications"))
+        stubFor(get(urlPathEqualTo("/v3/applications"))
                 .willReturn(aResponse()
                         .withStatus(200)
                         .withHeader("Content-Type", "application/json")
@@ -149,7 +149,7 @@ public class PlatformSnapshotSchedulerIntegrationTest {
         platformSnapshotScheduler.trigger();
         Thread.sleep(5000);
         PlatformSnapshot snapshot = platformSnapshotRepository.findTopByOrderByCreatedAtDesc();
-        assertTrue("0.8.1388".equals(snapshot.getPlatformVersion()));
+        assertTrue("0.8.0.2417".equals(snapshot.getPlatformVersion()));
     }
 
     @Test
@@ -159,7 +159,7 @@ public class PlatformSnapshotSchedulerIntegrationTest {
         Thread.sleep(5000);
         PlatformSnapshot snapshot = platformSnapshotRepository.findTopByOrderByCreatedAtDesc();
         assertEquals(1, snapshot.getApplications().size());
-        assertEquals(2, snapshot.getTapServices().size());
+        assertEquals(22, snapshot.getTapServices().size());
         assertEquals(14, snapshot.getCdhServices().size());
     }
 

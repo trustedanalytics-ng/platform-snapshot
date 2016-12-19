@@ -20,6 +20,6 @@ import lombok.Data;
 @Data
 public class TapServiceEntity {
 
-    private String label;
+    private String name;
     private String description;
 }

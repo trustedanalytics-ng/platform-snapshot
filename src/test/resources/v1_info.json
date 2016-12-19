@@ -1,9 +1,0 @@
-{"api_endpoint":"https://api.aaiokrb.gotapaas.eu",
-  "cli_version":"0.8.0",
-  "cli_url":"https://api.aaiokrb.gotapaas.eu/cli?ver=0.8.0",
-  "platform_version":"0.8.1388",
-  "core_organization":"trustedanalytics",
-  "external_tools":{"visualizations":null},
-  "cdh_version":"5.7.1",
-  "k8s_version":"1.3.0"
-}

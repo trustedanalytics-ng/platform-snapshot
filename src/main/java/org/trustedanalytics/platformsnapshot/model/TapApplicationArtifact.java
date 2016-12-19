@@ -37,7 +37,6 @@ import javax.persistence.Table;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.trustedanalytics.platformsnapshot.client.entity.TapMetadata;
 
 @Data
 @Table(name = "TAP_APPLICATION_ARTIFACT")

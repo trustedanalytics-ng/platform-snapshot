@@ -66,7 +66,7 @@ public class TapRxDecoderTest {
         // when
         @SuppressWarnings("unchecked")
         Observable<TapInfo> tapInfo =
-                ((Observable<List<TapInfo>>) decoder.decode(mockResponse(200, "v1_info.json"),
+                ((Observable<List<TapInfo>>) decoder.decode(mockResponse(200, "v3info.json"),
                 (new TypeToken<Observable<List<TapInfo>>>() {}).getType())).flatMapIterable(list -> list);
 
         final TestSubscriber<String> testSubscriber = new TestSubscriber<>();
@@ -92,7 +92,7 @@ public class TapRxDecoderTest {
 
         // then
         final TestSubscriber<String> testSubscriber = new TestSubscriber<>();
-        services.map(service -> service.getMetadata().getGuid()).subscribe(testSubscriber);
+        services.map(service -> service.getId()).subscribe(testSubscriber);
 
         testSubscriber.assertValues("9b213bd9-a54f-4f41-abb4-dd12e7e50814");
         verifyNoMoreInteractions(client);

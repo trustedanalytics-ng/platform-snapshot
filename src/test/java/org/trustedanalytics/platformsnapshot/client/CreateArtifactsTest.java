@@ -56,9 +56,9 @@ public class CreateArtifactsTest {
     @Test
     public void testCreateServiceArtifact() throws IOException {
 
-        final String pageJson = loadJson("catalog.json");
+        final String pageJson = loadJson("v3offerings.json");
 
-        stubFor(get(urlPathEqualTo("/v1/catalog"))
+        stubFor(get(urlPathEqualTo("/v3/offerings"))
                 .willReturn(aResponse()
                         .withStatus(200)
                         .withHeader("Content-Type", "application/json")
@@ -67,7 +67,7 @@ public class CreateArtifactsTest {
         TapService s = services.toBlocking().first();
         TapServiceArtifact serviceArtifact = new TapServiceArtifact(s);
 
-        assertEquals("redis28",serviceArtifact.getLabel());
+        assertEquals("gearpumpdashboard",serviceArtifact.getLabel());
 
         LOGGER.info("Service created at: {}", serviceArtifact.getCreatedAt());
         LOGGER.info("Tap service artifact{}", serviceArtifact);
@@ -78,7 +78,7 @@ public class CreateArtifactsTest {
 
         final String pageJson = loadJson("application.json");
 
-        stubFor(get(urlPathEqualTo("/v1/applications"))
+        stubFor(get(urlPathEqualTo("/v3/applications"))
                 .willReturn(aResponse()
                         .withStatus(200)
                         .withHeader("Content-Type", "application/json")
