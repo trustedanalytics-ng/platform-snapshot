@@ -4,7 +4,7 @@ spring:
 server.port: 8080
 
 security:
-  ignored: /rest/open,/*.js,/sdoc.jsp,/api-docs,/api-docs/default/*,/images/*,/lib/*,/css/*,/v2/api-docs
+  ignored: /rest/open,/*.js,/sdoc.jsp,/api-docs,/api-docs/default/*,/images/*,/lib/*,/css/*,/v2/api-docs,/health
 
 spring.oauth2:
   client:
@@ -51,7 +51,7 @@ spring:
 server.port: 8080
 
 security:
-  ignored: /rest/**,/rest/test,/console/**,/console,/test,/**,/*.js,/sdoc.jsp,/api-docs,/api-docs/default/*,/images/*,/lib/*,/css/*,/v2/api-docs
+  ignored: /rest/**,/rest/test,/console/**,/console,/test,/**,/*.js,/sdoc.jsp,/api-docs,/api-docs/default/*,/images/*,/lib/*,/css/*,/v2/api-docs,/health
 
 logging:
   level:
