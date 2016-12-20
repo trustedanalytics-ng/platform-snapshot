@@ -44,7 +44,6 @@ import java.io.InputStreamReader;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
-import java.util.UUID;
 
 import rx.Observable;
 import rx.observers.TestSubscriber;

@@ -41,7 +41,6 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.UUID;
 
 @RunWith(MockitoJUnitRunner.class)
 public class PlatformSnapshotSchedulerTest {
@@ -105,21 +104,6 @@ public class PlatformSnapshotSchedulerTest {
 
         // then
         assertEquals(expectedCdhCluster, actualCdhCluster);
-    }
-
-    @Test
-    public void testCfApplicationsOnEmpty() throws IOException {
-/* TODO
-        // when
-        when(tapOperations.getSpaces()).thenReturn(Observable.empty());
-        when(tapOperations.getApplications(any(UUID.class))).thenReturn(Observable.empty());
-
-        final TestSubscriber<TapApplicationArtifact> testSubscriber = new TestSubscriber<>();
-        platformSnapshotScheduler.cfApplications(UUID.randomUUID()).subscribe(testSubscriber);
-
-        // then
-        testSubscriber.assertNoValues();
-        */
     }
 
     @Test
@@ -206,7 +190,7 @@ public class PlatformSnapshotSchedulerTest {
         tapService.setMetadata(new TapMetadata());
         tapService.setEntity(new TapServiceEntity());
         tapService.getMetadata().setCreatedAt(LocalDateTime.of(2016, 4, 15, 15, 45, 0));
-        tapService.getMetadata().setGuid(UUID.randomUUID().toString());
+        tapService.getMetadata().setGuid("someID");
         return tapService;
     }
 

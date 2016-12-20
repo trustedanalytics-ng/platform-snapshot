@@ -20,12 +20,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.UUID;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class Org {
-    private UUID guid;
+    private String guid;
     private String name;
 }
