@@ -43,17 +43,13 @@ public class RepositoryConfig {
 
     @Bean
     public DataSource getPostgresSource() {
-
         LOGGER.info("Creating postgresql data source");
-
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName(env.getProperty("spring.database.driverClassName"));
         dataSource.setUrl(env.getProperty("spring.datasource.url"));
         dataSource.setUsername(env.getProperty("spring.datasource.username"));
         dataSource.setPassword(env.getProperty("spring.datasource.password"));
-
         return dataSource;
-
     }
 }
 
