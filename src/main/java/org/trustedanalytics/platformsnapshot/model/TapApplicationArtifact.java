@@ -156,7 +156,7 @@ public class TapApplicationArtifact implements  Serializable {
     }
 
     private Long getMegabytes(String mb) {
-        String values[] =mb.split("MB");
+        String[] values = mb.split("MB");
         if (values.length > 0) {
             return Long.valueOf(
                     values[0]
@@ -173,7 +173,7 @@ public class TapApplicationArtifact implements  Serializable {
         List<AppMetadataEntry> myData = Arrays.asList(app.getMetadata())
                 .stream().filter(entry -> key.equals(entry.getKey()))
                  .collect(Collectors.toList());
-        if (myData.size() > 0) {
+        if(!myData.isEmpty()) {
             return myData.get(0).getValue();
         }
         return null;
